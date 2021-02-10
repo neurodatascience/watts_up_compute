@@ -15,6 +15,6 @@ pip install --no-index --upgrade pip
 pip install --no-index pandas
 pip install --no-index torch torchvision
 
-python /home/nikhil/projects/def-jbpoline/nikhil/deep_learning/code/watts_up_compute/scripts/pytorch_test.py --input_size 512 --n_channels 1 --init_features 64 --max_epochs 10 --output_csv /home/nikhil/projects/def-jbpoline/nikhil/deep_learning/code/watts_up_compute/results/gpu_output.csv
+python /home/nikhil/projects/def-jbpoline/nikhil/deep_learning/code/watts_up_compute/scripts/pytorch_test_gpu.py --input_size 512 --n_channels 1 --init_features 64 --max_epochs 10 --output_csv /home/nikhil/projects/def-jbpoline/nikhil/deep_learning/code/watts_up_compute/results/gpu_output.csv
 
 #python pytorch-test.py
