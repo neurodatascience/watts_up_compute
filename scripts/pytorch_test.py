@@ -30,11 +30,10 @@ parser.add_argument('--output_csv', type=str, default='./output.csv', help='')
 MODEL_NAME = 'unet'
 
 def predict(x, model):
-    x_tensor = torch.from_numpy(x).float()
+    x_tensor = torch.from_numpy(x).float().cuda() #compute on gpu
     model.eval()
-    # y = model(torch.tensor(x_tensor))
     y = model(x_tensor.clone().detach())
-    return y.detach().numpy()
+    return y.cpu().detach().numpy() #move it to cpu for numpy
 
 
 def main():
@@ -66,6 +65,8 @@ def main():
         # model
         model = torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet',
             in_channels=n_channels, out_channels=1, init_features=init_features, pretrained=False,verbose=False)
+        
+        model.cuda() #to compute on gpu
 
         # output
         y = predict(x,model)
