@@ -26,7 +26,7 @@ parser.add_argument('--output_dir', type=str, default='../results/', help='')
 
 MODEL_NAME = 'unet'
 
-CPU_PARAMS = ['cpu_brand','cpu_arch','cpu_count','python_version']
+CPU_PARAMS = ['brand','hz_advertised','hz_actual','cpu_arch','cpu_count','python_version']
 GPU_PARAMS = ['gpu_device']
 INPUT_MODEL_PARAMS = ['model','input_size','init_features','n_channels','FLOPs','n_parameters']
 
@@ -74,7 +74,7 @@ def main():
         # model complexity
         flops_csv = '{}flops.csv'.format(output_dir)
         macs, params = get_model_complexity_info(model, (n_channels, input_size, input_size), as_strings=True,
-                                                print_per_layer_stat=False, verbose=False)
+                                                print_per_layer_stat=False)
 
         # energy tracker
         joules_csv = '{}joules.csv'.format(output_dir)
@@ -98,7 +98,7 @@ def main():
             compute_time = (end_time - start_time)/60.0
             perf_df.loc[epoch] = [epoch,compute_time]
 
-        perf_df[CPU_PARAMS + GPU_PARAMS + INPUT_MODEL_PARAMS] = list(np.hstack(cpu_df.loc[['brand_raw','arch','count','python_version']].values)) + \
+        perf_df[CPU_PARAMS + GPU_PARAMS + INPUT_MODEL_PARAMS] = list(np.hstack(cpu_df.loc[['brand','hz_advertised','hz_actual','arch','count','python_version']].values)) + \
             [gpu_device] + [MODEL_NAME, input_size, init_features, n_channels, macs, params]
 
         # save output

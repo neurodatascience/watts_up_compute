@@ -6,15 +6,9 @@
 #SBATCH --time=0-00:50
 #SBATCH --output=%N-%j.out
 
-module load python/3.6
+module load python/3.7
+source /home/nikhil/projects/def-jbpoline/nikhil/deep_learning/code/env/bin/activate
 
-virtualenv --no-download $SLURM_TMPDIR/env
-source $SLURM_TMPDIR/env/bin/activate
-
-pip install --no-index --upgrade pip
-pip install --no-index pandas
-pip install --no-index torch torchvision
-
-python /home/nikhil/projects/def-jbpoline/nikhil/deep_learning/code/watts_up_compute/scripts/pytorch_test_gpu.py --input_size 512 --n_channels 1 --init_features 64 --max_epochs 10 --output_csv /home/nikhil/projects/def-jbpoline/nikhil/deep_learning/code/watts_up_compute/results/gpu_output.csv
+python /home/nikhil/projects/def-jbpoline/nikhil/deep_learning/code/watts_up_compute/scripts/pytorch_test_gpu.py --input_size 512 --n_channels 1 --init_features 64 --max_epochs 10 --output_dir /home/nikhil/projects/def-jbpoline/nikhil/deep_learning/code/watts_up_compute/results/
 
 #python pytorch-test.py
