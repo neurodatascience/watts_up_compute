@@ -72,12 +72,12 @@ def main():
         in_channels=n_channels, out_channels=1, init_features=init_features, pretrained=False,verbose=False)
         
         # model complexity
-        flops_csv = '{}flops.csv'.format(output_dir)
+        flops_csv = '{}flops_gpu.csv'.format(output_dir)
         macs, params = get_model_complexity_info(model, (n_channels, input_size, input_size), as_strings=True,
                                                 print_per_layer_stat=False)
 
         # energy tracker
-        joules_csv = '{}joules.csv'.format(output_dir)
+        joules_csv = '{}joules_gpu.csv'.format(output_dir)
         csv_handler = CSVHandler(joules_csv)
 
         # epoch loop

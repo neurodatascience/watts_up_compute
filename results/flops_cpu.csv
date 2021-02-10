@@ -1,0 +1,11 @@
+,epoch,compute_time,brand,hz_advertised,hz_actual,cpu_arch,cpu_count,python_version,gpu_device,model,input_size,init_features,n_channels,FLOPs,n_parameters
+0,0.0,0.14200892051060995,Intel(R) Xeon(R) CPU E5-2683 v4 @ 2.10GHz,2.1000 GHz,1.2994 GHz,X86_64,32,3.7.4.final.0 (64 bit),,unet,512,64,1,192.81 GMac,31.04 M
+1,1.0,0.14167912006378175,Intel(R) Xeon(R) CPU E5-2683 v4 @ 2.10GHz,2.1000 GHz,1.2994 GHz,X86_64,32,3.7.4.final.0 (64 bit),,unet,512,64,1,192.81 GMac,31.04 M
+2,2.0,0.1421178658803304,Intel(R) Xeon(R) CPU E5-2683 v4 @ 2.10GHz,2.1000 GHz,1.2994 GHz,X86_64,32,3.7.4.final.0 (64 bit),,unet,512,64,1,192.81 GMac,31.04 M
+3,3.0,0.141725488503774,Intel(R) Xeon(R) CPU E5-2683 v4 @ 2.10GHz,2.1000 GHz,1.2994 GHz,X86_64,32,3.7.4.final.0 (64 bit),,unet,512,64,1,192.81 GMac,31.04 M
+4,4.0,0.14468127489089966,Intel(R) Xeon(R) CPU E5-2683 v4 @ 2.10GHz,2.1000 GHz,1.2994 GHz,X86_64,32,3.7.4.final.0 (64 bit),,unet,512,64,1,192.81 GMac,31.04 M
+5,5.0,0.14318782885869344,Intel(R) Xeon(R) CPU E5-2683 v4 @ 2.10GHz,2.1000 GHz,1.2994 GHz,X86_64,32,3.7.4.final.0 (64 bit),,unet,512,64,1,192.81 GMac,31.04 M
+6,6.0,0.1425095756848653,Intel(R) Xeon(R) CPU E5-2683 v4 @ 2.10GHz,2.1000 GHz,1.2994 GHz,X86_64,32,3.7.4.final.0 (64 bit),,unet,512,64,1,192.81 GMac,31.04 M
+7,7.0,0.14256299734115602,Intel(R) Xeon(R) CPU E5-2683 v4 @ 2.10GHz,2.1000 GHz,1.2994 GHz,X86_64,32,3.7.4.final.0 (64 bit),,unet,512,64,1,192.81 GMac,31.04 M
+8,8.0,0.15093567768732707,Intel(R) Xeon(R) CPU E5-2683 v4 @ 2.10GHz,2.1000 GHz,1.2994 GHz,X86_64,32,3.7.4.final.0 (64 bit),,unet,512,64,1,192.81 GMac,31.04 M
+9,9.0,0.1463827172915141,Intel(R) Xeon(R) CPU E5-2683 v4 @ 2.10GHz,2.1000 GHz,1.2994 GHz,X86_64,32,3.7.4.final.0 (64 bit),,unet,512,64,1,192.81 GMac,31.04 M
