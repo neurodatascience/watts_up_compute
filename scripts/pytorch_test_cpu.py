@@ -8,7 +8,7 @@ import time
 
 ###
 # Sample cmd: 
-# python pytorch_test.py --input_size 256 --n_channels 1 --init_features 128 --max_epochs 10 --output_csv ./output.csv
+# python pytorch_test.py --input_size 256 --n_channels 1 --init_features 128 --max_epochs 10 --output_csv ../results/cpu_output.csv
 ###
 
 parser = argparse.ArgumentParser(description='unet test')
@@ -30,10 +30,11 @@ parser.add_argument('--output_csv', type=str, default='./output.csv', help='')
 MODEL_NAME = 'unet'
 
 def predict(x, model):
-    x_tensor = torch.from_numpy(x).float().cuda() #compute on gpu
+    x_tensor = torch.from_numpy(x).float()
     model.eval()
+    # y = model(torch.tensor(x_tensor))
     y = model(x_tensor.clone().detach())
-    return y.cpu().detach().numpy() #move it to cpu for numpy
+    return y.detach().numpy()
 
 
 def main():
@@ -50,9 +51,6 @@ def main():
     max_epochs = args.max_epochs
     output_csv = args.output_csv
 
-    gpu_device = torch.cuda.get_device_name(0)
-
-    print('Using gpu device: {}'.format(gpu_device))
     print('Configs:\ninit_features={}, input_size={}, n_channels={}, max_epochs={}'.format(init_features,input_size,n_channels,max_epochs))
     print('Saving perf output at: {}'.format(output_csv))
 
@@ -68,8 +66,6 @@ def main():
         # model
         model = torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet',
             in_channels=n_channels, out_channels=1, init_features=init_features, pretrained=False,verbose=False)
-        
-        model.cuda() #to compute on gpu
 
         # output
         y = predict(x,model)
