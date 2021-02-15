@@ -1,0 +1,11 @@
+,epoch,compute_time,brand,cpu_arch,cpu_count,python_version,gpu_device,model,input_size,init_features,n_channels,FLOPs,n_parameters
+0,0.0,0.0026288549105326336,Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz,X86_64,8,3.7.9.final.0 (64 bit),,unet,256,32,1,13.7 GMac,7.76 M
+1,1.0,0.0025398731231689453,Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz,X86_64,8,3.7.9.final.0 (64 bit),,unet,256,32,1,13.7 GMac,7.76 M
+2,2.0,0.002500251928965251,Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz,X86_64,8,3.7.9.final.0 (64 bit),,unet,256,32,1,13.7 GMac,7.76 M
+3,3.0,0.002504066626230876,Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz,X86_64,8,3.7.9.final.0 (64 bit),,unet,256,32,1,13.7 GMac,7.76 M
+4,4.0,0.0026257952054341634,Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz,X86_64,8,3.7.9.final.0 (64 bit),,unet,256,32,1,13.7 GMac,7.76 M
+5,5.0,0.0026619474093119303,Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz,X86_64,8,3.7.9.final.0 (64 bit),,unet,256,32,1,13.7 GMac,7.76 M
+6,6.0,0.0025207996368408203,Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz,X86_64,8,3.7.9.final.0 (64 bit),,unet,256,32,1,13.7 GMac,7.76 M
+7,7.0,0.0025241692860921224,Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz,X86_64,8,3.7.9.final.0 (64 bit),,unet,256,32,1,13.7 GMac,7.76 M
+8,8.0,0.002528969446818034,Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz,X86_64,8,3.7.9.final.0 (64 bit),,unet,256,32,1,13.7 GMac,7.76 M
+9,9.0,0.0025444547335306805,Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz,X86_64,8,3.7.9.final.0 (64 bit),,unet,256,32,1,13.7 GMac,7.76 M
