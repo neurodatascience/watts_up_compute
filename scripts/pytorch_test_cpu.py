@@ -65,7 +65,7 @@ def main():
     cpu_df = pd.DataFrame(get_cpu_info().items(),columns=['field','value']).set_index('field')
 
     # laptop and cluter CPUs have difference in "cpuinfo" labels
-    if 'brand' in cpu_df.columns:
+    if 'brand' in cpu_df.index:
         brand_str = 'brand'
     else:
         brand_str = 'brand_raw'
