@@ -80,7 +80,7 @@ def main():
                                         print_per_layer_stat=False)
 
     # populate experiment config
-    exp_df.loc[:,exp_cols] = [experiment_name, device, model_name, macs, params, n_epochs, batch_size, optimizer_name]
+    exp_df.loc[0] = [experiment_name, device, model_name, macs, params, n_epochs, batch_size, optimizer_name]
 
     # optimizer
     criterion = nn.CrossEntropyLoss()
@@ -171,7 +171,7 @@ def main():
     exp_end_time = time.time()
     exp_compute_time = (exp_end_time - exp_start_time)/60.0
 
-    exp_df[['train_compute_time','test_compute_time','experiment_compute_time']] = [train_compute_time,test_compute_time,exp_compute_time]
+    exp_df.loc[:,['train_compute_time','test_compute_time','experiment_compute_time']] = [train_compute_time,test_compute_time,exp_compute_time]
 
     # Save 
     print('Saving model at: {}'.format(model_path))
