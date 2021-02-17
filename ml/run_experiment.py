@@ -41,7 +41,7 @@ def main():
     print('Using {} device'.format(device))
     
     # check / create experiment subdir
-    experiment_dir = '{}{}'.format(output_dir,experiment_name)
+    experiment_dir = '{}{}/{}'.format(output_dir,experiment_name,device)
     if not os.path.isdir(experiment_dir):
         os.makedirs(experiment_dir)
 
@@ -69,9 +69,9 @@ def main():
     model_path = '{}/{}.pth'.format(experiment_dir,model_name)
 
     if model_name == 'ResNet_1':
-        model = ResNet_1(ResidualBlock, [2, 2, 2]).to(device)
+        model = ResNet_1(device, ResidualBlock, [2, 2, 2]).to(device)
     elif model_name == 'ResNet_2':
-        model = ResNet_2(ResidualBlock, [2, 2, 2]).to(device)
+        model = ResNet_2(device, ResidualBlock, [2, 2, 2]).to(device)
     else:
         print('Unknown model: {}'.format(model_name))
 
