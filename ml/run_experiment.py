@@ -23,8 +23,10 @@ data_path = './data/'
 
 model_name = 'ResNet_1'
 optimizer_name = 'adam'
-n_epochs = 1
+n_epochs = 5
 batch_size = 4
+monitor_joules = True
+monitor_interval = 2000
 
 output_dir = '../results/'
 
@@ -113,24 +115,31 @@ def main():
             # zero the parameter gradients
             optimizer.zero_grad()
 
-            # pyjoules
-            with EnergyContext(handler=pd_handler, start_tag='forward') as ctx:
-                # forward + backward + optimize
-                outputs = model(images)
-                ctx.record(tag='loss')
-                loss = criterion(outputs, labels)
-                ctx.record(tag='backward')
-                loss.backward()
-                ctx.record(tag='step')
-                optimizer.step()
+            # Monitor joules sparingly
+            if (i % monitor_interval) == (monitor_interval-1):
+                if monitor_joules:
+                    # pyjoules
+                    with EnergyContext(handler=pd_handler, start_tag='forward') as ctx:
+                        # forward + backward + optimize
+                        outputs = model(images)
+                        ctx.record(tag='loss')
+                        loss = criterion(outputs, labels)
+                        ctx.record(tag='backward')  
+                        loss.backward()
+                        ctx.record(tag='step')
+                        optimizer.step()
 
-            # print statistics
-            running_loss += loss.item()
-            if i % 2000 == 1999:    # print every 2000 mini-batches
+                # print statistics
+                running_loss += loss.item()
                 avg_loss = running_loss / 2000
-                print('[%d, %5d] loss: %.3f' %
-                    (epoch + 1, i + 1, avg_loss))
+                print('epoch:{}, iter:{}, loss: {:3.2f}'.format(epoch + 1, i + 1, avg_loss))
                 running_loss = 0.0
+
+            else:
+                outputs = model(images)                
+                loss = criterion(outputs, labels)            
+                loss.backward()                
+                optimizer.step()
 
         # epoch end time
         end_time = time.time()
@@ -140,7 +149,7 @@ def main():
     # train end time
     train_end_time = time.time()
     train_compute_time = (train_end_time - train_start_time)/60.0
-    print('\nFinished Training at {}'.format(tic_time))
+    print('\nFinished Training at {}, compute time:{}'.format(train_end_time,train_compute_time))
 
     # test the model
     # test start time
@@ -177,8 +186,9 @@ def main():
     print('Saving model at: {}'.format(model_path))
     torch.save(model.state_dict(), model_path)
 
-    print('Saving joules trace at: {}'.format(joules_csv))
-    pd_handler.get_dataframe().to_csv(joules_csv)
+    if monitor_joules:
+        print('Saving joules trace at: {}'.format(joules_csv))
+        pd_handler.get_dataframe().to_csv(joules_csv)
 
     print('Saving epoch df at: {}'.format(epoch_csv))
     epoch_df.to_csv(epoch_csv)
@@ -186,7 +196,7 @@ def main():
     print('Saving experiment config df at: {}'.format(exp_csv))
     exp_df.to_csv(exp_csv)
 
-    print('\nFinished experiment {} at {}'.format(experiment_name, tic_time))
+    print('\nFinished experiment {} at {}, compute time: {}'.format(experiment_name, exp_end_time, exp_compute_time))
 
 
 if __name__=='__main__':
