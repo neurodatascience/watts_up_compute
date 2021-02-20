@@ -1,0 +1,2 @@
+,experiment_name,device,model,MAC,params,n_epochs,batch_size,optimizer,test_perf,train_compute_time,test_compute_time,experiment_compute_time
+0,Exp_pytorch_kaggle,cuda,unet,12.13 GMac,7.76 M,10,4,adam,57.15081776891435,4.82380518913269,0.007557006676991781,53.28660598595937

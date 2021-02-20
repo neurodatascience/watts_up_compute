@@ -20,13 +20,13 @@ from data import *
 from model import *
 
 experiment_name = 'Exp_pytorch_kaggle' #Exp_pytorch_cifar
-data_path = '../datasets/kaggle_3m_small' #'../datasets/cifar10'
+data_path = '/home/nikhil/scratch/deep_learning/datasets/kaggle_3m' #'../datasets/kaggle_3m' #'../datasets/cifar10'
 
 dataset_name = 'kaggle' #'cifar'
 model_name = 'unet' #'ResNet_1'
 loss_type = 'dice'
 optimizer_name = 'adam'
-n_epochs = 1
+n_epochs = 10
 batch_size = 4
 monitor_joules = True
 monitor_interval = 50 #2000
@@ -92,6 +92,8 @@ def main():
     # model complexity
     macs, params = get_model_complexity_info(model, (n_channels, input_size, input_size), as_strings=True,
                                         print_per_layer_stat=False)
+    
+    model.to(device) # get_model_complexity has a device mismatch otherwise.
 
     # populate experiment config
     exp_df.loc[0] = [experiment_name, device, model_name, macs, params, n_epochs, batch_size, optimizer_name]
@@ -118,7 +120,7 @@ def main():
     
     # train start time
     train_start_time = time.time()
-
+    
     epoch_df = pd.DataFrame(columns=['epoch','compute_time','loss'])
     for epoch in range(n_epochs):  # loop over the dataset multiple times
         

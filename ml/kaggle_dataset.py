@@ -24,7 +24,7 @@ class BrainSegmentationDataset(Dataset):
         image_size=256,
         subset="train",
         random_sampling=True,
-        validation_cases= 2,
+        validation_cases= 10,
         seed=42,
     ):
         assert subset in ["all", "train", "validation"]

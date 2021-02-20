@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --nodes 1          # Request 1 nodes so all resources are in two nodes.
 #SBATCH --gres=gpu:v100l:1       # Request GPU "generic resources"
-#SBATCH --cpus-per-task=1  # Cores proportional to GPUs: 6 on Cedar, 16 on Graham.
-#SBATCH --mem=8G       # Memory proportional to GPUs: 32000 Cedar, 64000 Graham.
-#SBATCH --time=0-00:50
-#SBATCH --output=logs/%N-%j.out
+#SBATCH --cpus-per-task=4  # Cores proportional to GPUs: 6 on Cedar, 16 on Graham.
+#SBATCH --mem=32G       # Memory proportional to GPUs: 32000 Cedar, 64000 Graham.
+#SBATCH --time=0-02:50
+#SBATCH --output=%N-%j.out
 
 module load python/3.7
 source /home/nikhil/projects/def-jbpoline/nikhil/deep_learning/code/env/bin/activate
