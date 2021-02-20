@@ -9,6 +9,7 @@ import torchvision.transforms as transforms
 import torch.optim as optim
 import torch.nn as nn
 import torch.nn.functional as F
+from cpuinfo import get_cpu_info
 
 from ptflops import get_model_complexity_info
 
@@ -20,7 +21,7 @@ from data import *
 from model import *
 
 experiment_name = 'Exp_pytorch_kaggle' #Exp_pytorch_cifar
-data_path = '/home/nikhil/scratch/deep_learning/datasets/kaggle_3m_small' #'../datasets/kaggle_3m' #'../datasets/cifar10'
+data_path = '../datasets/kaggle_3m' #'/home/nikhil/scratch/deep_learning/datasets/kaggle_3m' #'../datasets/kaggle_3m' #'../datasets/cifar10'
 
 dataset_name = 'kaggle' #'cifar'
 model_name = 'unet' #'ResNet_1'
@@ -54,8 +55,19 @@ def main():
     
     # experiment config
     exp_csv = '{}/experiment_config.csv'.format(experiment_dir)
-    exp_cols = ['experiment_name', 'device', 'model', 'MAC', 'params', 'n_epochs', 'batch_size', 'optimizer']
+    exp_cols = ['experiment_name','proc','arch','count','python_version', 'device', 'model', 'MAC', 'params', 'n_epochs', 'batch_size', 'optimizer']
     exp_df = pd.DataFrame(columns=exp_cols)
+
+    # cpu data
+    cpu_df = pd.DataFrame(get_cpu_info().items(),columns=['field','value']).set_index('field')
+
+    # laptop and cluter CPUs have difference in "cpuinfo" labels
+    if 'brand' in cpu_df.index:
+        brand_str = 'brand'
+    else:
+        brand_str = 'brand_raw'
+    
+    cpu_info = list(np.hstack(cpu_df.loc[[brand_str,'arch','count','python_version']].values))
     
     # energy tracker
     joules_csv = '{}/joules.csv'.format(experiment_dir)
@@ -92,12 +104,13 @@ def main():
     # model complexity
     macs, params = get_model_complexity_info(model, (n_channels, input_size, input_size), as_strings=True,
                                         print_per_layer_stat=False)
+    
+    model.to(device) # get_model_complexity has a device mismatch otherwise.
 
     # populate experiment config
-    exp_df.loc[0] = [experiment_name, device, model_name, macs, params, n_epochs, batch_size, optimizer_name]
+    exp_df.loc[0] = [experiment_name] + cpu_info + [device, model_name, macs, params, n_epochs, batch_size, optimizer_name]
 
     # optimizer
-
     if loss_type == 'dice':
         criterion = DiceLoss()
     elif loss_type == 'cross-entropy':
@@ -118,7 +131,7 @@ def main():
     
     # train start time
     train_start_time = time.time()
-
+    
     epoch_df = pd.DataFrame(columns=['epoch','compute_time','loss'])
     for epoch in range(n_epochs):  # loop over the dataset multiple times
         
