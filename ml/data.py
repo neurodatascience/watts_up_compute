@@ -1,10 +1,12 @@
+import sys
 import numpy as np
 import torch
 import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
-from kaggle_dataset import BrainSegmentationDataset as Dataset
-from kaggle_transform import custom_transforms
+sys.path.append('../')
+from ml.kaggle_dataset import BrainSegmentationDataset as Dataset
+from ml.kaggle_transform import custom_transforms
 
 
 def get_cifar10_dataset(data_path, batch_size, transform=True):

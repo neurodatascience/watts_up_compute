@@ -1,43 +1,69 @@
 import time
 import datetime
 import os
+import sys
 import pandas as pd
 import numpy as np
+import argparse
+
 import torch
 import torchvision
 import torchvision.transforms as transforms
 import torch.optim as optim
 import torch.nn as nn
 import torch.nn.functional as F
+
 from cpuinfo import get_cpu_info
-
 from ptflops import get_model_complexity_info
-
 from pyJoules.energy_meter import EnergyContext
 from pyJoules.handler.pandas_handler import PandasHandler
 
-from loss import DiceLoss
-from data import *
-from model import *
+sys.path.append('../')
+from ml.loss import DiceLoss
+from ml.data import *
+from ml.model import *
 
-experiment_name = 'Exp_pytorch_kaggle' #Exp_pytorch_cifar
-data_path = '../datasets/kaggle_3m' #'/home/nikhil/scratch/deep_learning/datasets/kaggle_3m' #'../datasets/kaggle_3m' #'../datasets/cifar10'
 
-dataset_name = 'kaggle' #'cifar'
-model_name = 'unet' #'ResNet_1'
-loss_type = 'dice'
-optimizer_name = 'adam'
-n_epochs = 10
-batch_size = 4
-monitor_joules = True
-monitor_interval = 50 #2000
+###
+# Sample cmds:
+# python run_experiment.py # This by default runs cifar10 experiment 
+# python run_experiment.py --experiment_name Exp_pytorch_kaggle --dataset_name kaggle_3m_small --model_name unet --loss_type dice --monitor_joules 0
+###
 
-output_dir = '../results/'
+parser = argparse.ArgumentParser(description='Runs a compute cost experiment with DL models')
+
+parser.add_argument('--experiment_name', type=str, default='Exp_test_run', help='')
+parser.add_argument('--dataset_name', type=str, default='cifar10', help='')
+parser.add_argument('--data_dir', type=str, default='../datasets/', help='')
+parser.add_argument('--model_name', type=str, default='ResNet_1', help='')
+parser.add_argument('--loss_type', type=str, default='cross-entropy', help='')
+parser.add_argument('--optimizer_name', type=str, default='adam', help='')
+parser.add_argument('--n_epochs', type=int, default=1, help='')
+parser.add_argument('--batch_size', type=int, default=4, help='')
+parser.add_argument('--monitor_joules', type=bool, default=True, help='')
+parser.add_argument('--output_dir', type=str, default='../results/', help='')
 
 def main():
+
+    args = parser.parse_args()
+    experiment_name = args.experiment_name #'Exp_pytorch_kaggle' #Exp_pytorch_cifar
+
+    dataset_name = args.dataset_name #'kaggle_3m' #'kaggle_3m_small' #'cifar10'
+    root_data_dir = args.data_dir #'/home/nikhil/scratch/deep_learning/datasets/' #'../datasets/'
+    data_path = '{}{}'.format(root_data_dir,dataset_name)
+
+    model_name = args.model_name #'unet' #'ResNet_1'
+    loss_type = args.loss_type #'cross-entropy' #'cross-entropy' #'dice'
+    optimizer_name = args.optimizer_name #'adam' or 'SGD'
+    n_epochs = args.n_epochs #1
+    batch_size = args.batch_size #4
+
+    monitor_joules = bool(args.monitor_joules) #True
+    output_dir = args.output_dir #'../results/'
     
     tic_time = datetime.datetime.now()
     print('\nStarting experiment: {} at {}'.format(experiment_name, tic_time))
+    print('using root data dir: {} and dataset: {}\n'.format(root_data_dir,dataset_name))
 
     # experiment start time
     exp_start_time = time.time()
@@ -77,12 +103,16 @@ def main():
     epoch_csv = '{}/epoch.csv'.format(experiment_dir)
 
     # data
-    if dataset_name == 'cifar':
+    if dataset_name == 'cifar10':
         train_loader, test_loader = get_cifar10_dataset(data_path, batch_size)
-    elif dataset_name == 'kaggle':
+    elif dataset_name in ['kaggle_3m','kaggle_3m_small']:
         train_loader, test_loader = get_kaggle_dataset(data_path)
     else:
         print('Unknown dataset: {}'.format(dataset_name))
+
+    # set monitor interval based on dataset size 
+    monitor_interval = np.max([1,len(train_loader)//10]) 
+    print('\nMonitoring loss and energy trace every: {} iters'.format(monitor_interval))
 
     dataiter = iter(test_loader)
     images, labels = dataiter.next()
@@ -133,6 +163,7 @@ def main():
     train_start_time = time.time()
     
     epoch_df = pd.DataFrame(columns=['epoch','compute_time','loss'])
+    avg_loss = 0
     for epoch in range(n_epochs):  # loop over the dataset multiple times
         
         # epoch start time
@@ -173,6 +204,7 @@ def main():
                 loss = criterion(outputs, labels)            
                 loss.backward()                
                 optimizer.step()
+                running_loss += loss.item()
 
         # epoch end time
         end_time = time.time()
