@@ -114,8 +114,7 @@ def main():
     else:
         print('Unknown dataset: {}'.format(dataset_name))
 
-    # set monitor interval based on dataset size 
-    # monitor_interval = 10 #np.max([1,len(train_loader)//10]) 
+  
     print('\nMonitoring loss and energy trace every: {} iters'.format(monitor_interval))
 
     dataiter = iter(test_loader)
@@ -123,6 +122,8 @@ def main():
     _,n_channels,input_size,_ = images.shape
     
     print('input size: {}'.format([input_size,input_size,n_channels]))
+    print('train samples: {}, test samples: {}'.format(len(train_loader),len(test_loader)))
+
     # model definition
     print('Using {} model'.format(model_name))
     model_path = '{}/{}.pth'.format(experiment_dir,model_name)
@@ -132,6 +133,9 @@ def main():
     elif model_name == 'unet':
         model = torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet',
             in_channels=3, out_channels=1, init_features=32, pretrained=False)
+    elif model_name == 'unet_small':
+        model = torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet',
+            in_channels=3, out_channels=1, init_features=8, pretrained=False)
     else:
         print('Unknown model: {}'.format(model_name))
 
