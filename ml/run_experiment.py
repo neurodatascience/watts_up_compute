@@ -41,6 +41,7 @@ parser.add_argument('--optimizer_name', type=str, default='adam', help='')
 parser.add_argument('--n_epochs', type=int, default=1, help='')
 parser.add_argument('--batch_size', type=int, default=4, help='')
 parser.add_argument('--monitor_joules', type=bool, default=True, help='')
+parser.add_argument('--monitor_interval', type=int, default=10, help='')
 parser.add_argument('--output_dir', type=str, default='../results/', help='')
 
 def main():
@@ -59,6 +60,7 @@ def main():
     batch_size = args.batch_size #4
 
     monitor_joules = bool(args.monitor_joules) #True
+    monitor_interval = args.monitor_interval
     output_dir = args.output_dir #'../results/'
     
     tic_time = datetime.datetime.now()
@@ -99,6 +101,8 @@ def main():
     joules_csv = '{}/joules.csv'.format(experiment_dir)
     pd_handler = PandasHandler()
 
+    # iter tracker
+    iter_csv = '{}/iter.csv'.format(experiment_dir)
     # epoch tracker
     epoch_csv = '{}/epoch.csv'.format(experiment_dir)
 
@@ -111,7 +115,7 @@ def main():
         print('Unknown dataset: {}'.format(dataset_name))
 
     # set monitor interval based on dataset size 
-    monitor_interval = np.max([1,len(train_loader)//10]) 
+    # monitor_interval = 10 #np.max([1,len(train_loader)//10]) 
     print('\nMonitoring loss and energy trace every: {} iters'.format(monitor_interval))
 
     dataiter = iter(test_loader)
@@ -151,7 +155,7 @@ def main():
     if optimizer_name == 'SGD':
         optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
     else:
-        optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+        optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
     
     # train
@@ -164,6 +168,7 @@ def main():
     
     epoch_df = pd.DataFrame(columns=['epoch','compute_time','loss'])
     avg_loss = 0
+    iter_loss = []
     for epoch in range(n_epochs):  # loop over the dataset multiple times
         
         # epoch start time
@@ -197,6 +202,7 @@ def main():
                 running_loss += loss.item()
                 avg_loss = running_loss / monitor_interval
                 print('epoch:{}, iter:{}, loss: {:4.3f}'.format(epoch + 1, i + 1, avg_loss))
+                iter_loss.append(avg_loss)
                 running_loss = 0.0
 
             else:
@@ -266,17 +272,26 @@ def main():
 
     exp_df.loc[:,['train_compute_time','test_compute_time','experiment_compute_time']] = [train_compute_time,test_compute_time,exp_compute_time]
 
-    # Save 
+    # save model 
     print('Saving model at: {}'.format(model_path))
     torch.save(model.state_dict(), model_path)
 
+    # save iter data
+    print('Saving iter df at: {}'.format(iter_csv))
     if monitor_joules:
+        joules_df = pd_handler.get_dataframe()
         print('Saving joules trace at: {}'.format(joules_csv))
-        pd_handler.get_dataframe().to_csv(joules_csv)
+        joules_df.to_csv(joules_csv)
 
+    iter_df = pd.DataFrame()
+    iter_df['iter_loss'] = iter_loss
+    iter_df.to_csv(iter_csv)
+
+    # save epoch data
     print('Saving epoch df at: {}'.format(epoch_csv))
     epoch_df.to_csv(epoch_csv)
 
+    # save experiment data
     print('Saving experiment config df at: {}'.format(exp_csv))
     exp_df.to_csv(exp_csv)
 
