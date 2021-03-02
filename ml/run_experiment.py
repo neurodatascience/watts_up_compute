@@ -204,7 +204,9 @@ def main():
     avg_loss_train = 0
     iter_loss_train = []
     iter_loss_valid = []
+    iter_loss_test = []
     lowest_loss = 100 #used to decide whether to save model or not
+
     for epoch in range(n_epochs):  # loop over the dataset multiple times
         
         # epoch start time
@@ -242,9 +244,17 @@ def main():
                 # valid loss
                 valid_loss, percent_perf = inference(model, valid_loader, criterion, loss_type, device)
                 avg_loss_valid = np.mean(valid_loss)
-                print('epoch:{}, iter:{}, train_loss: {:4.3f}, valid_loss: {:4.3f}'.format(epoch + 1, i + 1, avg_loss_train, avg_loss_valid))
+                # test loss (for reference)
+                test_loss, percent_perf = inference(model, test_loader, criterion, loss_type, device)
+                avg_loss_test = np.mean(test_loss)
+
+                print('epoch:{}, iter:{}, train_loss: {:4.3f}, valid_loss: {:4.3f}, test_loss: {:4.3f}'.format(epoch + 1, i + 1, avg_loss_train, 
+                avg_loss_valid,avg_loss_test))
+
                 iter_loss_train.append(avg_loss_train)
                 iter_loss_valid.append(avg_loss_valid)
+                iter_loss_test.append(avg_loss_test)
+
                 running_loss = 0.0
 
                 if avg_loss_valid < lowest_loss:
@@ -304,6 +314,7 @@ def main():
     iter_df = pd.DataFrame()
     iter_df['train_loss'] = iter_loss_train
     iter_df['valid_loss'] = iter_loss_valid
+    iter_df['test_loss'] = iter_loss_test
     iter_df.to_csv(iter_csv)
 
     # save epoch data
