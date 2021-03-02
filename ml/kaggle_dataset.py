@@ -120,6 +120,7 @@ class BrainSegmentationDataset(Dataset):
         slice_n = self.patient_slice_index[idx][1]
 
         if self.random_sampling:
+            random.seed(153)
             patient = np.random.randint(len(self.volumes))
             slice_n = np.random.choice(
                 range(self.volumes[patient][0].shape[0]), p=self.slice_weights[patient]
