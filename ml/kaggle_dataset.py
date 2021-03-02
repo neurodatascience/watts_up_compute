@@ -25,9 +25,10 @@ class BrainSegmentationDataset(Dataset):
         subset="train",
         random_sampling=True,
         validation_cases= 10,
+        test_cases = 10,
         seed=42,
     ):
-        assert subset in ["all", "train", "validation"]
+        assert subset in ["all", "train", "validation","test"]
 
         # read images
         volumes = {}
@@ -55,12 +56,16 @@ class BrainSegmentationDataset(Dataset):
         # select cases to subset
         if not subset == "all":
             random.seed(seed)
-            validation_patients = random.sample(self.patients, k=validation_cases)
+            validation_plus_test_patients = random.sample(self.patients, k=validation_cases+test_cases)
+            validation_patients = validation_plus_test_patients[:validation_cases]
+            test_patients = validation_plus_test_patients[validation_cases:]
             if subset == "validation":
                 self.patients = validation_patients
+            elif subset == "test":
+                self.patients = test_patients
             else:
                 self.patients = sorted(
-                    list(set(self.patients).difference(validation_patients))
+                    list(set(self.patients).difference(validation_plus_test_patients))
                 )
 
         print("preprocessing {} volumes...".format(subset))

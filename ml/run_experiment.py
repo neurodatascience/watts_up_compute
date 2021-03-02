@@ -40,9 +40,38 @@ parser.add_argument('--loss_type', type=str, default='cross-entropy', help='')
 parser.add_argument('--optimizer_name', type=str, default='adam', help='')
 parser.add_argument('--n_epochs', type=int, default=1, help='')
 parser.add_argument('--batch_size', type=int, default=4, help='')
+parser.add_argument('--test_cases', type=int, default=10, help='')
 parser.add_argument('--monitor_joules', type=bool, default=True, help='')
 parser.add_argument('--monitor_interval', type=int, default=10, help='')
 parser.add_argument('--output_dir', type=str, default='../results/', help='')
+
+def inference(model, data_loader, criterion, loss_type, device): 
+        model.eval()
+        with torch.no_grad():
+            running_loss = []
+            correct = 0
+            total = 0  
+            for images, labels in data_loader:
+                images = images.to(device)
+                labels = labels.to(device)
+                outputs = model(images)
+                loss = criterion(outputs, labels)
+                running_loss.append(loss.item())
+
+                if loss_type == 'cross-entropy':
+                    _, predicted = torch.max(outputs.data, 1)
+                    total += labels.size(0)
+                    correct += (predicted == labels).sum().item()
+                    percent_perf = 100 * correct / total
+                    
+                elif loss_type == 'dice':
+                    percent_perf = 100 * (1 - np.mean(running_loss))
+
+                else:
+                    print('unknown loss type: {}'.format(loss_type))
+                    break
+
+        return running_loss, percent_perf
 
 def main():
 
@@ -58,6 +87,7 @@ def main():
     optimizer_name = args.optimizer_name #'adam' or 'SGD'
     n_epochs = args.n_epochs #1
     batch_size = args.batch_size #4
+    test_cases = args.test_cases #10
 
     monitor_joules = bool(args.monitor_joules) #True
     monitor_interval = args.monitor_interval
@@ -108,21 +138,21 @@ def main():
 
     # data
     if dataset_name == 'cifar10':
-        train_loader, test_loader = get_cifar10_dataset(data_path, batch_size)
+        train_loader, valid_loader, test_loader = get_cifar10_dataset(data_path, test_cases=None, batch_size=100)
     elif dataset_name in ['kaggle_3m','kaggle_3m_small']:
-        train_loader, test_loader = get_kaggle_dataset(data_path)
+        train_loader, valid_loader, test_loader = get_kaggle_dataset(data_path, test_cases=test_cases, batch_size=batch_size)
     else:
         print('Unknown dataset: {}'.format(dataset_name))
 
-  
     print('\nMonitoring loss and energy trace every: {} iters'.format(monitor_interval))
+    print('\nNumber of test_cases (same as validation cases): {}'.format(test_cases))
 
     dataiter = iter(test_loader)
     images, labels = dataiter.next()
     _,n_channels,input_size,_ = images.shape
     
     print('input size: {}'.format([input_size,input_size,n_channels]))
-    print('train samples: {}, test samples: {}'.format(len(train_loader),len(test_loader)))
+    print('train samples: {}, valid samples: {}, test samples: {}'.format(len(train_loader),len(valid_loader),len(test_loader)))
 
     # model definition
     print('Using {} model'.format(model_name))
@@ -170,9 +200,11 @@ def main():
     # train start time
     train_start_time = time.time()
     
-    epoch_df = pd.DataFrame(columns=['epoch','compute_time','loss'])
-    avg_loss = 0
-    iter_loss = []
+    epoch_df = pd.DataFrame(columns=['epoch','compute_time','train_loss','valid_loss'])
+    avg_loss_train = 0
+    iter_loss_train = []
+    iter_loss_valid = []
+    lowest_loss = 100 #used to decide whether to save model or not
     for epoch in range(n_epochs):  # loop over the dataset multiple times
         
         # epoch start time
@@ -201,13 +233,25 @@ def main():
                         loss.backward()
                         ctx.record(tag='step')
                         optimizer.step()
+                        ctx.record(tag='overhead')
 
                 # print statistics
+                # train loss
                 running_loss += loss.item()
-                avg_loss = running_loss / monitor_interval
-                print('epoch:{}, iter:{}, loss: {:4.3f}'.format(epoch + 1, i + 1, avg_loss))
-                iter_loss.append(avg_loss)
+                avg_loss_train = running_loss / monitor_interval
+                # valid loss
+                valid_loss, percent_perf = inference(model, valid_loader, criterion, loss_type, device)
+                avg_loss_valid = np.mean(valid_loss)
+                print('epoch:{}, iter:{}, train_loss: {:4.3f}, valid_loss: {:4.3f}'.format(epoch + 1, i + 1, avg_loss_train, avg_loss_valid))
+                iter_loss_train.append(avg_loss_train)
+                iter_loss_valid.append(avg_loss_valid)
                 running_loss = 0.0
+
+                if avg_loss_valid < lowest_loss:
+                    lowest_loss = avg_loss_valid 
+                    # save model 
+                    print('Saving model at: {}'.format(model_path))
+                    torch.save(model.state_dict(), model_path)
 
             else:
                 outputs = model(images)                
@@ -219,7 +263,7 @@ def main():
         # epoch end time
         end_time = time.time()
         compute_time = (end_time - start_time)/60.0
-        epoch_df.loc[epoch] = [epoch,compute_time,avg_loss]
+        epoch_df.loc[epoch] = [epoch,compute_time,avg_loss_train,avg_loss_valid]
 
     # train end time
     train_end_time = time.time()
@@ -231,38 +275,10 @@ def main():
     # test start time
     test_start_time = time.time()
     print('Evaluating on test set')
-    model.eval()
-    with torch.no_grad():
-        if loss_type == 'cross-entropy':
-            correct = 0
-            total = 0
-            for images, labels in test_loader:
-                images = images.to(device)
-                labels = labels.to(device)
-                outputs = model(images)
-                _, predicted = torch.max(outputs.data, 1)
-                total += labels.size(0)
-                correct += (predicted == labels).sum().item()
 
-            test_perf = 100 * correct / total
-            print('Accuracy of the model on the test images: {} %'.format(test_perf))
-    
-        elif loss_type == 'dice':
-            running_loss = []
-            for images, labels in test_loader:
-                images = images.to(device)
-                labels = labels.to(device)
-                outputs = model(images)
-                loss = criterion(outputs, labels)
-                running_loss.append(loss.item())
-
-            test_perf = 100 * (1 - np.mean(running_loss))
-            print('Dice performance (%) of the model on the test images: {}'.format(test_perf))
-
-        else:
-            print('unknown loss type: {}'.format(loss_type))
-
-    exp_df['test_perf'] = test_perf
+    running_loss, percent_perf = inference(model, test_loader, criterion, loss_type, device)
+    exp_df['test_perf'] = percent_perf
+    print('Percent test perf: {:4.3f}'.format(percent_perf))
 
     # test end time
     test_end_time = time.time()
@@ -276,9 +292,7 @@ def main():
 
     exp_df.loc[:,['train_compute_time','test_compute_time','experiment_compute_time']] = [train_compute_time,test_compute_time,exp_compute_time]
 
-    # save model 
-    print('Saving model at: {}'.format(model_path))
-    torch.save(model.state_dict(), model_path)
+    
 
     # save iter data
     print('Saving iter df at: {}'.format(iter_csv))
@@ -288,7 +302,8 @@ def main():
         joules_df.to_csv(joules_csv)
 
     iter_df = pd.DataFrame()
-    iter_df['iter_loss'] = iter_loss
+    iter_df['train_loss'] = iter_loss_train
+    iter_df['valid_loss'] = iter_loss_valid
     iter_df.to_csv(iter_csv)
 
     # save epoch data

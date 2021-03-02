@@ -9,7 +9,7 @@ from ml.kaggle_dataset import BrainSegmentationDataset as Dataset
 from ml.kaggle_transform import custom_transforms
 
 
-def get_cifar10_dataset(data_path, batch_size, transform=True):
+def get_cifar10_dataset(data_path, test_cases=None, batch_size=100, transform=True):
     transform = transforms.Compose(
             [transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
@@ -24,18 +24,35 @@ def get_cifar10_dataset(data_path, batch_size, transform=True):
     test_loader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
                                         shuffle=False, num_workers=2)
 
-    return train_loader, test_loader
+    # cifar is large enough to ignore early stopping
+    # set valid_loader = test_loader to be consistent with other datasets
+    valid_loader = test_loader
 
-def get_kaggle_dataset(data_path,image_size=256,aug_scale=0.05,aug_angle=15,batch_size=4,workers=4):
+    return train_loader, valid_loader, test_loader
+
+def get_kaggle_dataset(data_path,test_cases,batch_size=4,image_size=256,aug_scale=0.05,aug_angle=15,workers=4):
     dataset_train = Dataset(
         images_dir = data_path,
         subset = "train",
+        validation_cases = test_cases,
+        test_cases = test_cases,
         transform = custom_transforms(scale=aug_scale, angle=aug_angle, flip_prob=0.5),
+    )
+
+    dataset_validation = Dataset(
+        images_dir = data_path,
+        subset = "validation",
+        validation_cases = test_cases,
+        test_cases = test_cases,
+        image_size = image_size,
+        random_sampling = False,
     )
 
     dataset_test = Dataset(
         images_dir = data_path,
-        subset = "validation",
+        subset = "test",
+        validation_cases = test_cases,
+        test_cases = test_cases,
         image_size = image_size,
         random_sampling = False,
     )
@@ -51,6 +68,13 @@ def get_kaggle_dataset(data_path,image_size=256,aug_scale=0.05,aug_angle=15,batc
         num_workers= workers,
         worker_init_fn=worker_init,
     )
+    loader_validation = torch.utils.data.DataLoader(
+        dataset_validation,
+        batch_size= batch_size,
+        drop_last=False,
+        num_workers= workers,
+        worker_init_fn=worker_init,
+    )
     loader_test = torch.utils.data.DataLoader(
         dataset_test,
         batch_size= batch_size,
@@ -59,4 +83,4 @@ def get_kaggle_dataset(data_path,image_size=256,aug_scale=0.05,aug_angle=15,batc
         worker_init_fn=worker_init,
     )
 
-    return loader_train, loader_test
+    return loader_train, loader_validation, loader_test
