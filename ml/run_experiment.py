@@ -160,12 +160,20 @@ def main():
 
     if model_name == 'ResNet_1':
         model = ResNet_1(device, ResidualBlock, [2, 2, 2]).to(device)
+
     elif model_name == 'unet':
         model = torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet',
             in_channels=3, out_channels=1, init_features=32, pretrained=False)
+    elif model_name == 'unet_medium':
+        model = torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet',
+            in_channels=3, out_channels=1, init_features=16, pretrained=False)
     elif model_name == 'unet_small':
         model = torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet',
             in_channels=3, out_channels=1, init_features=8, pretrained=False)
+    elif model_name == 'unet_tiny':
+        model = torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet',
+            in_channels=3, out_channels=1, init_features=4, pretrained=False)
+            
     else:
         print('Unknown model: {}'.format(model_name))
 
