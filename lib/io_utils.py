@@ -27,3 +27,13 @@ def read_joules(f,device):
     joules_df['device'] = device
 
     return joules_df
+
+
+def convert_str_to_param_value(df, param_col):
+    param_df = pd.DataFrame()
+    param_df[[param_col,'unit']] = df[param_col].str.split(' ',expand=True)
+    param_df.loc[param_df['unit'].isin(['k','kMac']),param_col] = param_df[param_df['unit'].isin(['k','kMac'])][param_col].astype(float).values*1e3
+    param_df.loc[param_df['unit'].isin(['M','MMac']),param_col] = param_df[param_df['unit'].isin(['M','MMac'])][param_col].astype(float).values*1e6
+    param_df.loc[param_df['unit'].isin(['G','GMac']),param_col] = param_df[param_df['unit'].isin(['G','GMac'])][param_col].astype(float).values*1e9
+    df[param_col] = param_df[param_col]
+    return df
