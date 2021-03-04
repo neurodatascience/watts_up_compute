@@ -62,14 +62,15 @@ def inference(model, data_loader, criterion, loss_type, device):
                     _, predicted = torch.max(outputs.data, 1)
                     total += labels.size(0)
                     correct += (predicted == labels).sum().item()
-                    percent_perf = 100 * correct / total
+            
+            if loss_type == 'cross-entropy':
+                percent_perf = 100 * correct / total
                     
-                elif loss_type == 'dice':
-                    percent_perf = 100 * (1 - np.mean(running_loss))
+            elif loss_type == 'dice':
+                percent_perf = 100 * (1 - np.mean(running_loss))
 
-                else:
-                    print('unknown loss type: {}'.format(loss_type))
-                    break
+            else:
+                print('unknown loss type: {}'.format(loss_type))
 
         return running_loss, percent_perf
 
@@ -255,10 +256,10 @@ def main():
                 running_loss += loss.item()
                 avg_loss_train = running_loss / monitor_interval
                 # valid loss
-                valid_loss, percent_perf = inference(model, valid_loader, criterion, loss_type, device)
+                valid_loss, valid_percent_perf = inference(model, valid_loader, criterion, loss_type, device)
                 avg_loss_valid = np.mean(valid_loss)
                 # test loss (for reference)
-                test_loss, percent_perf = inference(model, test_loader, criterion, loss_type, device)
+                test_loss, test_percent_perf = inference(model, test_loader, criterion, loss_type, device)
                 avg_loss_test = np.mean(test_loss)
 
                 print('epoch:{}, iter:{}, train_loss: {:4.3f}, valid_loss: {:4.3f}, test_loss: {:4.3f}'.format(epoch + 1, i + 1, avg_loss_train, 
@@ -272,6 +273,8 @@ def main():
 
                 if avg_loss_valid < lowest_loss:
                     lowest_loss = avg_loss_valid 
+                    model_test_perf = test_percent_perf #save test perf for the model selected based on valid loss
+
                     # save model 
                     print('Saving model at: {}'.format(model_path))
                     torch.save(model.state_dict(), model_path)
@@ -298,10 +301,10 @@ def main():
     # test start time
     test_start_time = time.time()
     print('Evaluating on test set')
-
     running_loss, percent_perf = inference(model, test_loader, criterion, loss_type, device)
-    exp_df['test_perf'] = percent_perf
-    print('Percent test perf: {:4.3f}'.format(percent_perf))
+    exp_df['test_perf_selected'] = test_percent_perf
+    exp_df['test_perf_final'] = percent_perf
+    print('Percent test perf: {:4.3f} (best), {:4.3f} (final)'.format(test_percent_perf, percent_perf))
 
     # test end time
     test_end_time = time.time()
@@ -314,8 +317,6 @@ def main():
     exp_compute_time = (exp_end_time - exp_start_time)/60.0
 
     exp_df.loc[:,['train_compute_time','test_compute_time','experiment_compute_time']] = [train_compute_time,test_compute_time,exp_compute_time]
-
-    
 
     # save iter data
     print('Saving iter df at: {}'.format(iter_csv))
