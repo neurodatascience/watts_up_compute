@@ -219,7 +219,7 @@ def main():
     iter_loss_train = []
     iter_loss_valid = []
     iter_loss_test = []
-    lowest_loss = 100 #used to decide whether to save model or not
+    lowest_valid_loss = 100 #used to decide whether to save model or not
 
     for epoch in range(n_epochs):  # loop over the dataset multiple times
         
@@ -271,8 +271,8 @@ def main():
 
                 running_loss = 0.0
 
-                if avg_loss_valid < lowest_loss:
-                    lowest_loss = avg_loss_valid 
+                if avg_loss_valid < lowest_valid_loss:
+                    lowest_valid_loss = avg_loss_valid 
                     model_test_perf = test_percent_perf #save test perf for the model selected based on valid loss
 
                     # save model 
@@ -302,8 +302,9 @@ def main():
     test_start_time = time.time()
     print('Evaluating on test set')
     running_loss, percent_perf = inference(model, test_loader, criterion, loss_type, device)
+    exp_df['valid_perf_selected'] = lowest_valid_loss
     exp_df['test_perf_selected'] = test_percent_perf
-    exp_df['test_perf_final'] = percent_perf
+    exp_df['test_perf'] = percent_perf
     print('Percent test perf: {:4.3f} (best), {:4.3f} (final)'.format(test_percent_perf, percent_perf))
 
     # test end time
