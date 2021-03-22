@@ -1,0 +1,8 @@
+,task,DP,MAC,params
+0,setup,[779],0,0
+1,axial,[26351],0,0
+2,Coronal,[26205],0,0
+3,Sagittal,[26821],0,0
+4,aggregate,[3761266571],0,0
+5,cleanup,[0],0,0
+6,save,[171],0,0
