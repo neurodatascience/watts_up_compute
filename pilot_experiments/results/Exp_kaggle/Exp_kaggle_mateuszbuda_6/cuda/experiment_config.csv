@@ -1,0 +1,2 @@
+,Unnamed: 0,experiment_name,proc,arch,count,python_version,device,model,MAC,params,n_epochs,batch_size,optimizer,test_perf,train_compute_time,test_compute_time,experiment_compute_time,valid_perf_selected,test_perf_selected
+0,0,Exp_kaggle_mateuszbuda_6,Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz,X86_64,32,3.7.4.final.0 (64 bit),cuda,unet_small,0.78 GMac,486.55 k,20,16,adam,43.63733673095703,14.08004270394643,0.0132884661356608,89.0568816781044,51.06714130884193,37.86690806605152

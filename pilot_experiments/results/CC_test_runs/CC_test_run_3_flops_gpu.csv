@@ -1,0 +1,11 @@
+,epoch,compute_time,brand,cpu_arch,cpu_count,python_version,gpu_device,model,input_size,init_features,n_channels,FLOPs,n_parameters
+0,0.0,0.10120099782943726,Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz,X86_64,32,3.7.4.final.0 (64 bit),Tesla V100-SXM2-32GB,unet,256,128,1,192.51 GMac,124.12 M
+1,1.0,0.0002477129300435384,Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz,X86_64,32,3.7.4.final.0 (64 bit),Tesla V100-SXM2-32GB,unet,256,128,1,192.51 GMac,124.12 M
+2,2.0,0.0003633777300516764,Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz,X86_64,32,3.7.4.final.0 (64 bit),Tesla V100-SXM2-32GB,unet,256,128,1,192.51 GMac,124.12 M
+3,3.0,0.0003487388292948405,Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz,X86_64,32,3.7.4.final.0 (64 bit),Tesla V100-SXM2-32GB,unet,256,128,1,192.51 GMac,124.12 M
+4,4.0,0.000378111998240153,Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz,X86_64,32,3.7.4.final.0 (64 bit),Tesla V100-SXM2-32GB,unet,256,128,1,192.51 GMac,124.12 M
+5,5.0,0.00032684008280436195,Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz,X86_64,32,3.7.4.final.0 (64 bit),Tesla V100-SXM2-32GB,unet,256,128,1,192.51 GMac,124.12 M
+6,6.0,0.00035149256388346354,Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz,X86_64,32,3.7.4.final.0 (64 bit),Tesla V100-SXM2-32GB,unet,256,128,1,192.51 GMac,124.12 M
+7,7.0,0.00034979979197184247,Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz,X86_64,32,3.7.4.final.0 (64 bit),Tesla V100-SXM2-32GB,unet,256,128,1,192.51 GMac,124.12 M
+8,8.0,0.00034942626953125,Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz,X86_64,32,3.7.4.final.0 (64 bit),Tesla V100-SXM2-32GB,unet,256,128,1,192.51 GMac,124.12 M
+9,9.0,0.00034907658894856773,Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz,X86_64,32,3.7.4.final.0 (64 bit),Tesla V100-SXM2-32GB,unet,256,128,1,192.51 GMac,124.12 M
