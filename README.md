@@ -1,23 +1,46 @@
 # watts_up_compute
 
-## Code repo measuring several computational metrics associated with power consumptions of neuroimaging analysis
+## Code repo measuring several compute costs of neuroimaging analyses
 
-### Experiment objectives:
-- measure compute cost metrics:
+## Experiment objectives:
+- Measure compute cost metrics:
   - model parameters
   - model FLOPs/MACs
     - [general purpose](http://www.bnikolic.co.uk/blog/python/flops/2019/09/27/python-counting-events.html)
     - [pytorch:ptflops](https://github.com/sovrasov/flops-counter.pytorch)
-  - train and inference times
-  - train and inference energy [pyjoules](https://github.com/powerapi-ng/pyJoules)
+  - model energy/power consumption
+    - [pyJoules](https://github.com/powerapi-ng/pyJoules)
+    - [experiment-impact-tracker](https://github.com/Breakend/experiment-impact-tracker)
+  - model duration: development (e.g. model traning and selection) and deployment (e.g. model run / inference) times
   - model performance (accuracy / dice score)
 - compare
   - hardware: cpu vs gpu
-  - datasets: cifar, kaggle (tumor MRI)
+  - datasets: cifar, kaggle (tumor MRI), ukb
   - models
-    - classification vs segmentation (unet)
-    - model sizes 
-    - input sizes
+    - Traditional neuroimaging pipelines (e.g. FreeSurfer)
+    - DL alternatives (e.g. FastSurfer)
 
-- Other baselines
-  - profile compute costs of feature engineering (e.g. [fMRI tangent space](https://nilearn.github.io/auto_examples/03_connectivity/plot_group_level_connectivity.html#sphx-glr-auto-examples-03-connectivity-plot-group-level-connectivity-py)) 
+## Repo organization
+```
+.
+├── FastSurfer_experiments
+├── figures
+├── lib
+├── LICENSE
+├── notebooks
+├── pilot_experiments
+├── preproc_pipeline_experiments
+├── README.md
+├── requirements.txt
+├── scripts
+├── slurm
+└── unit_tests
+```
+
+### Notes:  
+- All power consumption analyses are performed using this [repo](https://github.com/nikhil153/experiment-impact-tracker)
+- FastSurfer_experiments are run using this [repo](https://github.com/nikhil153/FastSurfer)
+- Pilot experiments with kaggle dataset are based one this [repo](https://github.com/mateuszbuda/brain-segmentation-pytorch)
+
+### Example analysis
+TODO 

@@ -1,19 +1,39 @@
 # Import modules
 import os
+import sys
 from os.path import join as opj
 import pandas as pd
+import time
 from nipype.interfaces.freesurfer import ReconAll
 from nipype.interfaces.utility import IdentityInterface
 from nipype.pipeline.engine import Workflow, Node
 from pypapi import events, papi_high as high
 
+# experiment tracker
+sys.path.append('../')
+sys.path.append('../../')
+sys.path.append('../../../')
+sys.path.append('../../../green_comp_neuro/experiment-impact-tracker/')
+from experiment_impact_tracker.compute_tracker import ImpactTracker
+
 # Specify important variables
-experiment_dir =  '/home/nipype_tutorial' #'~/nipype_tutorial'           # location of experiment folder
+experiment_dir =  '/home/nikhil/projects/neurodocker/nipype_tutorial' #'~/nipype_tutorial'           # location of experiment folder
+# experiment_dir =  '~/nipype_tutorial' #'~/nipype_tutorial'
+
+# nipype tutorial example
 data_dir = opj(experiment_dir, 'data')         # location of data folder
-fs_folder = opj(experiment_dir, 'freesurfer')  # location of freesurfer folder
-subject_list = ['sub002']                        # subject identifier
+subject_list = ['sub001']                        # subject identifier
 T1_identifier = 'struct.nii.gz'                  # Name of T1-weighted image
-flop_csv = 'FS_reconall_flop_2.csv'
+
+# local example
+# data_dir = opj(experiment_dir, 'i_data')         # location of data folder
+# subject_list = ['sub-000']                        # subject identifier
+# T1_identifier = 'orig.nii.gz'                  # Name of T1-weighted image
+
+fs_folder = opj(experiment_dir, 'freesurfer')  # location of freesurfer folder
+
+log_dir = './logs/ReconAll_test_location_override/'
+flop_csv = log_dir + 'compute_costs_flop.csv'
 
 
 def get_reconall(recon_directive):
@@ -33,13 +53,22 @@ def pathfinder(subject, foldername, filename):
 
 
 def main():
+    # setup
+    exp_start_time = time.time()
+
     # Create the output folder - FreeSurfer can only run if this folder exists
     os.system('mkdir -p %s' % fs_folder)
 
     # Specify recon workflow stages
-    recon_directives = ['autorecon1','autorecon2','autorecon3'] #'autorecon1',
+    recon_directives = ['autorecon2','autorecon3'] #'autorecon1',
 
-    flop_df = pd.DataFrame(columns=['task','count'])
+    flop_df = pd.DataFrame(columns=['task','start_time','duration','DP'])
+
+    # experiment impact tracker
+    # Init tracker with log path
+    tracker = ImpactTracker(log_dir)
+    # Start tracker in a separate process
+    tracker.launch_impact_monitor()
 
     for r, recon_directive in enumerate(recon_directives):
         print('\nStarting stage: {}'.format(recon_directive))
@@ -61,22 +90,22 @@ def main():
                                                     data_dir, T1_identifier),
                                                     'T1_files')]),
                         ])
-        # Papi
-        # n_counters = high.num_counters()
-        # print('papi counters: {}'.format(n_counters))
-
+        
         # start flop counter
+        start_time = time.time()
         high.start_counters([events.PAPI_DP_OPS,]) #default: PAPI_FP_OPS
 
-        # This command runs the recon-all pipeline in parallel (using 8 cores)
-        # reconflow.run('MultiProc', plugin_args={'n_procs': 1})
+        # This command runs the recon-all pipeline in parallel (using n_procs cores)
+        # reconflow.run('MultiProc', plugin_args={'n_procs': 4})
         reconflow.run() 
 
         # stop flop counter
-        DP = high.stop_counters()
-        print('Flops: {}'.format(DP))
+        DP = high.stop_counters()[0]
+        end_time = time.time()
+        duration = end_time - start_time
+        print('Duration: {}, Flops: {}'.format(duration, DP))
 
-        flop_df.loc[r] = [recon_directive,DP]
+        flop_df.loc[r] = [recon_directive,start_time, duration, DP]
 
     flop_df.to_csv(flop_csv)
 
