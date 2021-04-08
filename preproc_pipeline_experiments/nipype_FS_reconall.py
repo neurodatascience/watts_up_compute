@@ -8,31 +8,25 @@ from nipype.interfaces.freesurfer import ReconAll
 from nipype.interfaces.utility import IdentityInterface
 from nipype.pipeline.engine import Workflow, Node
 from pypapi import events, papi_high as high
+import argparse
 
 # experiment tracker
 sys.path.append('../')
 sys.path.append('../../')
-sys.path.append('../../../')
-sys.path.append('../../../green_comp_neuro/experiment-impact-tracker/')
+sys.path.append('../../experiment-impact-tracker/')
 from experiment_impact_tracker.compute_tracker import ImpactTracker
 
 # Specify important variables
-experiment_dir =  '/home/nikhil/projects/neurodocker/nipype_tutorial' #'~/nipype_tutorial'           # location of experiment folder
-# experiment_dir =  '~/nipype_tutorial' #'~/nipype_tutorial'
+experiment_dir =  '/home/nikhil/green_compute/freesurfer/ukb_pilot' #'~/nipype_tutorial'           # location of experiment folder
 
-# nipype tutorial example
-data_dir = opj(experiment_dir, 'data')         # location of data folder
-subject_list = ['sub001']                        # subject identifier
-T1_identifier = 'struct.nii.gz'                  # Name of T1-weighted image
 
-# local example
-# data_dir = opj(experiment_dir, 'i_data')         # location of data folder
-# subject_list = ['sub-000']                        # subject identifier
-# T1_identifier = 'orig.nii.gz'                  # Name of T1-weighted image
+data_dir = '/neurohub/ukbb/imaging/'
+subject_list = ['sub-2017717']
+T1_identifier = 'ses-2/anat/sub-2017717_ses-2_T1w.nii.gz'
 
 fs_folder = opj(experiment_dir, 'freesurfer')  # location of freesurfer folder
 
-log_dir = './logs/ReconAll_test_location_override/'
+log_dir = './logs/ReconAll_test_singularity/'
 flop_csv = log_dir + 'compute_costs_flop.csv'
 
 
@@ -60,13 +54,16 @@ def main():
     os.system('mkdir -p %s' % fs_folder)
 
     # Specify recon workflow stages
-    recon_directives = ['autorecon2','autorecon3'] #'autorecon1',
+    recon_directives = ['autorecon1'] #,'autorecon2','autorecon3'] #'autorecon1',
 
     flop_df = pd.DataFrame(columns=['task','start_time','duration','DP'])
 
     # experiment impact tracker
     # Init tracker with log path
-    tracker = ImpactTracker(log_dir)
+    coords = (45.4972159,-73.6103642) #MTL
+    print('coords: {}'.format(coords))
+
+    tracker = ImpactTracker(log_dir,coords)
     # Start tracker in a separate process
     tracker.launch_impact_monitor()
 
