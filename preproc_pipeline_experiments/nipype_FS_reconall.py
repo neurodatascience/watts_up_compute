@@ -74,7 +74,7 @@ def main():
 
     fs_folder = opj(experiment_dir, 'freesurfer')  # location of freesurfer folder
 
-    log_dir = '{}/{}'.format(tracker_output_dir,subject_id)
+    log_dir = '{}/{}/'.format(tracker_output_dir,subject_id)
     flop_csv = log_dir + 'compute_costs_flop.csv'
 
     # Create the output folder - FreeSurfer can only run if this folder exists

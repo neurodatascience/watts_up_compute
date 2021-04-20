@@ -9,4 +9,4 @@
 module load python/3.7
 source /home/nikhil/projects/def-jbpoline/nikhil/deep_learning/code/env/bin/activate
 
-python /home/nikhil/projects/def-jbpoline/nikhil/deep_learning/code/watts_up_compute/ml/run_experiment.py
+python /home/nikhil/projects/def-jbpoline/nikhil/deep_learning/code/watts_up_compute/pilot_experiments/run_experiment.py

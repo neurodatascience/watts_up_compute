@@ -16,7 +16,7 @@ from experiment_impact_tracker.data_utils import (load_data_into_frame,
                                                   zip_data_and_info)
 
 
-def compute_aggregate_power(df, info, PUE, task_epoch_df):
+def compute_aggregate_power(df, info, PUE, task_epoch_df,use_cuda):
     ''' Aggregates and partitions power consumption based on task interval timpestamps. This function is similar to https://github.com/nikhil153/experiment-impact-tracker/blob/master/experiment_impact_tracker/utils.py, but partitioned according to different tasks in the pipeline (e.g. setup, predict, aggregate)'''
 
     # time calcs
@@ -50,9 +50,7 @@ def compute_aggregate_power(df, info, PUE, task_epoch_df):
     )
 
     # nvidia calcs
-    has_gpu = False
-    if "gpu_info" in info.keys():
-        has_gpu = True
+    if use_cuda:        
         num_gpus = len(info["gpu_info"])
         nvidia_power_draw_kw = df["nvidia_estimated_attributable_power_draw"] / 1000.0
         nvidia_power_draw_kw.loc[len(nvidia_power_draw_kw)] = nvidia_power_draw_kw.loc[
@@ -63,11 +61,11 @@ def compute_aggregate_power(df, info, PUE, task_epoch_df):
         kw_hr_nvidia = np.multiply(time_differences_in_hours, nvidia_power_draw_kw)
 
     # apply PUE 
-    if has_gpu and (kw_hr_rapl is not None):
+    if use_cuda and (kw_hr_rapl is not None):
         total_power_per_timestep = PUE * (kw_hr_nvidia + kw_hr_rapl)
     elif kw_hr_rapl is not None:
         total_power_per_timestep = PUE * (kw_hr_rapl)
-    elif has_gpu:
+    elif use_cuda:
         total_power_per_timestep = PUE * (kw_hr_nvidia)
     else:
         raise ValueError("Unable to get either GPU or CPU metric.")
@@ -153,7 +151,7 @@ def get_tracker_data(experiment_name, logdir, use_cuda, read_flops):
             task_epoch_df['task'] = flops_df['task']
             task_epoch_df['epoch_timestamp'] = epoch_timestamps
             
-            power_df, task_power_df = compute_aggregate_power(power_df, info, PUE, task_epoch_df)
+            power_df, task_power_df = compute_aggregate_power(power_df, info, PUE, task_epoch_df, use_cuda)
             flops_df = pd.merge(flops_df,task_power_df,on='task',how='left')
 
             print('total_power sanity check: default: {:6.5f}, calculated: {:6.5f}, {:6.5f}'.format(total_power, task_power_df.loc[0,'power'],power_df['total_power_per_timestep'].sum()))
