@@ -102,13 +102,7 @@ def get_tracker_data(experiment_name, logdir, use_cuda, read_flops):
     '''
     try:
         info = load_initial_info(logdir)
-        log_info_found = True
-    except:
-        print('No valid experiment impact tracker log found for: {} at {}'.format(experiment_name, logdir))
-        log_info_found = False
-
-    if log_info_found:
-    
+        
         # Get total values from default data interface for the entire experiment 
         data_interface = DataInterface([logdir])
         total_power = data_interface.total_power
@@ -163,7 +157,8 @@ def get_tracker_data(experiment_name, logdir, use_cuda, read_flops):
 
         return power_df, flops_df, tracker_summary_df
 
-    else:
+    except:
+        print('No valid experiment impact tracker log found for: {} at {}'.format(experiment_name, logdir))
         return None
  
 

@@ -24,7 +24,7 @@ def get_multi_label_dice(label_list, y_true, y_pred):
     values = [delayed(dice_coef)(y_true == label, y_pred == label) 
               for label in label_list]
 
-    dice_list = compute(*values, scheduler='threads',num_workers=4) 
+    dice_list = compute(*values, scheduler='threads',num_workers=2) 
     dice_dict = dict(zip(label_list,dice_list)) 
 
     return pd.DataFrame(list(dice_dict.items()),columns=['label','dice'])
