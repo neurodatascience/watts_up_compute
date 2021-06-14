@@ -3,7 +3,7 @@
 ## Code repo to assess compute costs of neuroimaging pipelines
 
 
-## Motiation
+## Motivation
 - Increasing supply of large datasets and machine-learning models
 - Growing demand for computational resources exceeding Moore’s law [[1](https://openai.com/blog/ai-and-compute/), [2](https://www.technologyreview.com/2019/06/06/239031/training-a-single-ai-model-can-emit-as-much-carbon-as-five-cars-in-their-lifetimes/
 ), [3](https://arxiv.org/abs/1907.10597), [4](https://dl.acm.org/doi/10.1145/3442188.3445922), [5](https://arxiv.org/abs/2104.10350)]
@@ -33,23 +33,6 @@
     - Traditional neuroimaging pipelines (e.g. FreeSurfer)
     - DL alternatives (e.g. FastSurfer)
 
-## Repo organization
-```
-.
-├── FastSurfer_experiments
-├── figures
-├── lib
-├── LICENSE
-├── notebooks
-├── pilot_experiments
-├── preproc_pipeline_experiments
-├── README.md
-├── requirements.txt
-├── scripts
-├── slurm
-└── unit_tests
-```
-
 ## Notes:  
 - All power consumption analyses are performed using this [repo](https://github.com/nikhil153/experiment-impact-tracker)
 - FastSurfer_experiments are run using this [repo](https://github.com/nikhil153/FastSurfer)
@@ -68,7 +51,7 @@
 - Compute cost tracker: [experiment-impact-tracker]((https://github.com/Breakend/experiment-impact-tracker))
 
 
-<img src="figures/FreeSurfer_FastSurfer.png" alt="Drawing" align="middle" width="600px"/>
+<img src="figures/FreeSurfer_FastSurfer.png" alt="Drawing" align="middle" width="800px"/>
 
 
 ### Notebooks:
