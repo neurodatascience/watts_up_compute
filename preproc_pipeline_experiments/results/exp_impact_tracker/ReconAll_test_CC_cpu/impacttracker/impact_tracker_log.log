@@ -1,0 +1,174 @@
+2021-04-05 16:29:13,085 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 16:29:13,094 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 435, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 16:38:14,832 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 16:38:14,832 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 435, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 16:39:37,822 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 16:39:37,823 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 435, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 16:43:46,111 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 16:43:46,111 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 435, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 16:45:17,933 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 16:45:17,936 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 368, in get_rapl_power
+    time.sleep(2.0)
+
+2021-04-05 16:46:13,888 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 16:46:13,889 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 435, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 19:34:39,416 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 19:34:39,519 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 161, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 112, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 435, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 19:44:28,452 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 19:44:28,456 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 161, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 112, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 435, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 21:38:04,857 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 21:38:04,894 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 95, in _sample_and_log_power
+    required_headers = _get_compatible_data_headers(get_current_region_info_cached()[0])
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 73, in get_current_region_info_cached
+    return get_current_region_info(ttl_hash=get_ttl_hash(seconds=60 * 60))
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 43, in get_current_region_info
+    return get_zone_information_by_coords(get_current_location())
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 10, in get_zone_information_by_coords
+    region = get_region_by_coords(coords)
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 17, in get_region_by_coords
+    point = Point(lon, lat)
+  File "/usr/local/lib/python3.6/dist-packages/shapely/geometry/point.py", line 48, in __init__
+    self._set_coords(*args)
+  File "/usr/local/lib/python3.6/dist-packages/shapely/geometry/point.py", line 137, in _set_coords
+    self._geom, self._ndim = geos_point_from_py(tuple(args))
+  File "/usr/local/lib/python3.6/dist-packages/shapely/geometry/point.py", line 214, in geos_point_from_py
+    dx = c_double(coords[0])
+
+2021-04-05 21:41:25,388 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 21:41:25,461 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 95, in _sample_and_log_power
+    required_headers = _get_compatible_data_headers(get_current_region_info_cached()[0])
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 73, in get_current_region_info_cached
+    return get_current_region_info(ttl_hash=get_ttl_hash(seconds=60 * 60))
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 43, in get_current_region_info
+    return get_zone_information_by_coords(get_current_location())
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 10, in get_zone_information_by_coords
+    region = get_region_by_coords(coords)
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 17, in get_region_by_coords
+    point = Point(lon, lat)
+  File "/usr/local/lib/python3.6/dist-packages/shapely/geometry/point.py", line 48, in __init__
+    self._set_coords(*args)
+  File "/usr/local/lib/python3.6/dist-packages/shapely/geometry/point.py", line 137, in _set_coords
+    self._geom, self._ndim = geos_point_from_py(tuple(args))
+  File "/usr/local/lib/python3.6/dist-packages/shapely/geometry/point.py", line 214, in geos_point_from_py
+    dx = c_double(coords[0])
+
+2021-04-05 21:46:22,499 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 21:46:22,566 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 95, in _sample_and_log_power
+    required_headers = _get_compatible_data_headers(get_current_region_info_cached()[0])
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 73, in get_current_region_info_cached
+    return get_current_region_info(ttl_hash=get_ttl_hash(seconds=60 * 60))
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 43, in get_current_region_info
+    return get_zone_information_by_coords(get_current_location())
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 10, in get_zone_information_by_coords
+    region = get_region_by_coords(coords)
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 17, in get_region_by_coords
+    point = Point(lon, lat)
+  File "/usr/local/lib/python3.6/dist-packages/shapely/geometry/point.py", line 48, in __init__
+    self._set_coords(*args)
+  File "/usr/local/lib/python3.6/dist-packages/shapely/geometry/point.py", line 137, in _set_coords
+    self._geom, self._ndim = geos_point_from_py(tuple(args))
+  File "/usr/local/lib/python3.6/dist-packages/shapely/geometry/point.py", line 214, in geos_point_from_py
+    dx = c_double(coords[0])
+
+2021-04-05 22:15:35,295 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 22:15:35,326 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 95, in _sample_and_log_power
+    required_headers = _get_compatible_data_headers(get_current_region_info_cached()[0])
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 74, in get_current_region_info_cached
+    return get_current_region_info(ttl_hash=get_ttl_hash(seconds=60 * 60))
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 43, in get_current_region_info
+    return get_zone_information_by_coords(get_current_location())
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 10, in get_zone_information_by_coords
+    region = get_region_by_coords(coords)
+  File "../../experiment-impact-tracker/experiment_impact_tracker/emissions/get_region_metrics.py", line 17, in get_region_by_coords
+    point = Point(lon, lat)
+  File "/usr/local/lib/python3.6/dist-packages/shapely/geometry/point.py", line 48, in __init__
+    self._set_coords(*args)
+  File "/usr/local/lib/python3.6/dist-packages/shapely/geometry/point.py", line 137, in _set_coords
+    self._geom, self._ndim = geos_point_from_py(tuple(args))
+  File "/usr/local/lib/python3.6/dist-packages/shapely/geometry/point.py", line 214, in geos_point_from_py
+    dx = c_double(coords[0])
+
+2021-04-05 22:25:43,429 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 22:25:43,445 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 164, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+
+2021-04-05 22:27:39,526 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 22:27:39,617 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 164, in launch_power_monitor
+    _sample_and_log_power(log_dir, REGION_COORDS, initial_info, logger=logger)
+
+2021-04-05 22:29:55,032 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 22:29:55,098 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 164, in launch_power_monitor
+    _sample_and_log_power(log_dir, REGION_COORDS, initial_info, logger=logger)
+  File "../../experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 96, in _sample_and_log_power
+    required_headers = _get_compatible_data_headers(get_region_info(REGION_COORDS)[0])
+

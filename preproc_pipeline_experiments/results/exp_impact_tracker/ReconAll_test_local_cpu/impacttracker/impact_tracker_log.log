@@ -1,0 +1,160 @@
+2021-04-05 16:29:13,085 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 16:29:13,094 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 435, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 16:38:14,832 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 16:38:14,832 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 435, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 16:39:37,822 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 16:39:37,823 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 435, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 16:43:46,111 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 16:43:46,111 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 435, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 16:45:17,933 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 16:45:17,936 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 368, in get_rapl_power
+    time.sleep(2.0)
+
+2021-04-05 16:46:13,888 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 16:46:13,889 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 435, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 19:54:38,698 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 19:54:38,698 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 447, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 19:59:24,515 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 19:59:24,517 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 558, in get_rapl_power
+    "For some reason the total intel estimated power is less than the attributable power. This "
+
+2021-04-05 20:02:46,483 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 20:02:46,484 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 449, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 20:10:17,503 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 20:10:17,503 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 565, in get_rapl_power
+    "For some reason the total intel estimated power is less than the attributable power. This "
+
+2021-04-05 20:16:40,167 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 20:16:40,167 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 456, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 20:18:06,093 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 20:18:06,094 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 566, in get_rapl_power
+    "For some reason the total intel estimated power is less than the attributable power. This "
+
+2021-04-05 20:18:44,451 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 20:18:44,452 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 566, in get_rapl_power
+    "For some reason the total intel estimated power is less than the attributable power. This "
+
+2021-04-05 20:24:39,323 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 20:24:39,324 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 566, in get_rapl_power
+    "For some reason the total intel estimated power is less than the attributable power. This "
+
+2021-04-05 20:29:19,772 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 20:29:19,774 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 457, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
+2021-04-05 20:32:34,485 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR - Encountered exception within power monitor thread!
+2021-04-05 20:32:34,486 - experiment_impact_tracker.compute_tracker.ImpactTracker - ERROR -   File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 163, in launch_power_monitor
+    _sample_and_log_power(log_dir, initial_info, logger=logger)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/compute_tracker.py", line 114, in _sample_and_log_power
+    log_dir=log_dir,
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 88, in get_intel_power
+    return get_rapl_power(pid_list, logger, **kwargs)
+  File "../../../green_comp_neuro/experiment-impact-tracker/experiment_impact_tracker/cpu/intel.py", line 458, in get_rapl_power
+    st2, st22, system_wide_pt2, pt2 = infos2[i]
+
