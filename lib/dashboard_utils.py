@@ -115,17 +115,17 @@ def get_tracker_data(experiment_name, logdir, use_cuda, read_flops):
         tracker_df =  load_data_into_frame(logdir)
 
         if use_cuda:
-            power_df = tracker_df[0][['timestamp','rapl_power_draw_absolute','rapl_estimated_attributable_power_draw','nvidia_draw_absolute','nvidia_estimated_attributable_power_draw']]
-            power_df['total_attributable_power_draw'] = power_df['rapl_estimated_attributable_power_draw'] + power_df['nvidia_estimated_attributable_power_draw']
+            power_df = tracker_df[0][['timestamp','rapl_power_draw_absolute','rapl_estimated_attributable_power_draw','nvidia_draw_absolute','nvidia_estimated_attributable_power_draw']].copy()
+            power_df.loc[:,'total_attributable_power_draw'] = power_df['rapl_estimated_attributable_power_draw'] + power_df['nvidia_estimated_attributable_power_draw']
 
         else:
-            power_df = tracker_df[0][['timestamp','rapl_power_draw_absolute','rapl_estimated_attributable_power_draw']]
-            power_df['total_attributable_power_draw'] = power_df['rapl_estimated_attributable_power_draw']
+            power_df = tracker_df[0][['timestamp','rapl_power_draw_absolute','rapl_estimated_attributable_power_draw']].copy()
+            power_df.loc[:,'total_attributable_power_draw'] = power_df['rapl_estimated_attributable_power_draw']
             
         # start time from 0
-        power_df['timestamp_orig'] = power_df['timestamp'].copy()
-        power_df['timestamp'] = power_df['timestamp'] - power_df['timestamp'][0]
-        power_df['experiment_name'] = experiment_name
+        power_df.loc[:,'timestamp_orig'] = power_df['timestamp']
+        power_df.loc[:,'timestamp'] = power_df['timestamp'] - power_df['timestamp'][0]
+        power_df.loc[:,'experiment_name'] = experiment_name
 
         # papi log
         flops_df = None
@@ -133,17 +133,17 @@ def get_tracker_data(experiment_name, logdir, use_cuda, read_flops):
         if read_flops:
             compute_flops_csv = logdir + 'compute_costs_flop.csv'
             flops_df = pd.read_csv(compute_flops_csv)
-            flops_df['experiment_name'] = experiment_name
+            flops_df.loc[:,'experiment_name'] = experiment_name
         
-            flops_df['start_time'] = flops_df['start_time'] - flops_df['start_time'][0]
+            flops_df.loc[:,'start_time'] = flops_df['start_time'] - flops_df['start_time'][0]
 
             # Aggregate power draws per epoch for each papi context calculation (i.e. setup, axial, aggr etc))
             epoch_power_draw_list = []
             epoch_timestamps = list(flops_df['start_time'].values[1:]) + [flops_df['start_time'].values[-1] + flops_df['duration'].values[-1]]
 
             task_epoch_df = pd.DataFrame()
-            task_epoch_df['task'] = flops_df['task']
-            task_epoch_df['epoch_timestamp'] = epoch_timestamps
+            task_epoch_df.loc[:,'task'] = flops_df['task'].values
+            task_epoch_df.loc[:,'epoch_timestamp'] = epoch_timestamps
             
             power_df, task_power_df = compute_aggregate_power(power_df, info, PUE, task_epoch_df, use_cuda)
             flops_df = pd.merge(flops_df,task_power_df,on='task',how='left')
