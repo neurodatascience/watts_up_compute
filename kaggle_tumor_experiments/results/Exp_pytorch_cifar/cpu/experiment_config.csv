@@ -1,2 +1,0 @@
-,experiment_name,proc,arch,count,python_version,device,model,MAC,params,n_epochs,batch_size,optimizer,test_perf,train_compute_time,test_compute_time,experiment_compute_time
-0,Exp_pytorch_cifar,Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz,X86_64,8,3.7.9.final.0 (64 bit),cpu,ResNet_1,0.03 GMac,195.74 k,1,4,adam,52.6,4.6601384798685705,0.25151721636454266,4.947994597752889

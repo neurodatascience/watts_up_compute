@@ -1,2 +1,0 @@
-,experiment_name,proc,arch,count,python_version,device,model,MAC,params,n_epochs,batch_size,optimizer,test_perf,train_compute_time,test_compute_time,experiment_compute_time
-0,Exp_kaggle_mateuszbuda,Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz,X86_64,8,3.7.9.final.0 (64 bit),cpu,unet,13.74 GMac,7.76 M,10,4,adam,72.24954962730408,863.1892552892367,0.8539971788724263,875.1811865647634
