@@ -1,23 +1,14 @@
 
-# Copyright 2019 Image Analysis Lab, German Center for Neurodegenerative Diseases (DZNE), Bonn
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# This is modified from https://github.com/Deep-MI/FastSurfer/blob/master/FastSurferCNN/eval.py
+# Author: Nikhil Bhagwat
+# Date: 20 July 2021
 
 
 # IMPORTS
 import argparse
 import nibabel as nib
 import numpy as np
+import pandas as pd
 from datetime import datetime
 import time
 import sys
@@ -26,7 +17,7 @@ import os.path as op
 import logging
 import torch
 import torch.nn as nn
-import torch.nn.utils.prune as prune
+# import torch.nn.utils.prune as prune
 import torch.nn.functional as F
 
 from torch.autograd import Variable
@@ -40,58 +31,30 @@ from skimage.measure import label
 from collections import OrderedDict
 from os import makedirs
 
-from data_loader.load_neuroimaging_data import OrigDataThickSlices
-from data_loader.load_neuroimaging_data import map_label2aparc_aseg
-from data_loader.load_neuroimaging_data import map_prediction_sagittal2full
-from data_loader.load_neuroimaging_data import get_largest_cc
-from data_loader.load_neuroimaging_data import load_and_conform_image
+# FastSurfer repo
+# sys.path.append('../../../../FastSurfer/FastSurferCNN')
 
-from data_loader.augmentation import ToTensorTest
+from FastSurferCNN.data_loader.load_neuroimaging_data import OrigDataThickSlices
+from FastSurferCNN.data_loader.load_neuroimaging_data import map_label2aparc_aseg
+from FastSurferCNN.data_loader.load_neuroimaging_data import map_prediction_sagittal2full
+from FastSurferCNN.data_loader.load_neuroimaging_data import get_largest_cc
+from FastSurferCNN.data_loader.load_neuroimaging_data import load_and_conform_image
+from FastSurferCNN.data_loader.augmentation import ToTensorTest
 
-from models.networks import FastSurferCNN
+from FastSurferCNN.models.networks import FastSurferCNN
 
-# Compute costs
-import pandas as pd
+# Model arch costs
 from ptflops import get_model_complexity_info
 from pypapi import events, papi_high as high
-from thop import profile
 
-# experiment tracker
-sys.path.append('../../')
-sys.path.append('../')
-sys.path.append('../../experiment-impact-tracker/')
+# Carbon costs
+# sys.path.append('../../../../experiment-impact-tracker/')
 from experiment_impact_tracker.compute_tracker import ImpactTracker
 
-sys.path.append('../../nni')
-from nni import compression
-from nni.algorithms.compression.pytorch.pruning import L1FilterPruner, L2FilterPruner, LevelPruner, FPGMPruner
-from nni.compression.pytorch import ModelSpeedup
-
-# quantize
-from nni.algorithms.compression.pytorch.quantization import NaiveQuantizer, QAT_Quantizer
 
 HELPTEXT = """
-Script to generate aparc.DKTatlas+aseg.deep.mgz using Deep Learning. \n
-
-Dependencies:
-
-    Torch 
-    Torchvision
-    Skimage
-    Numpy
-    Matplotlib
-    h5py
-    scipy
-    Python 3.5
-    Nibabel (to read and write neuroimaging data, http://nipy.org/nibabel/)
-
-
-Original Author: Leonie Henschel
-
-Date: Mar-12-2019
-
+Script to run FastSurferCNN module
 """
-
 
 def options_parse():
     """
