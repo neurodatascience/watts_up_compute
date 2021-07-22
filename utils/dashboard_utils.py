@@ -162,7 +162,7 @@ def get_tracker_data(experiment_name, logdir, use_cuda, read_flops):
         return None
  
 
-def collate_tracker_data(tracker_log_dir, exp_list, use_cuda, read_flops=True):
+def collate_tracker_data(tracker_log_dir, exp_list, use_cuda, read_flops):
     ''' Collates tracker data from a set of experiments e.g. FastSurfer results for all subjects
     '''
     experiment_dict = {}

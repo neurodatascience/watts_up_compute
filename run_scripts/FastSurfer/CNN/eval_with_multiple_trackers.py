@@ -639,5 +639,3 @@ if __name__ == "__main__":
         print(f"Please find your experiment logs in: {log_dir}")
 
         sys.exit(0)
-
-    

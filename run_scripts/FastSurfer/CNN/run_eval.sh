@@ -21,5 +21,4 @@ python3 eval_with_multiple_trackers.py --i_dir ${DATA_DIR} \
 	--network_axial_path ${FASTSURFER_DIR}/checkpoints/Axial_Weights_FastSurferCNN/ckpts/Epoch_30_training_state.pkl \
 	--geo_loc '45.4972159,-73.6103642' \
 	--tracker_log_dir ${TRACKER_LOG_DIR} \
-	--mock_run 1
-	
+	--mock_run 0
