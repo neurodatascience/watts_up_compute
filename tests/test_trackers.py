@@ -11,6 +11,9 @@ from experiment_impact_tracker.data_interface import DataInterface
 
 from codecarbon import EmissionsTracker, OfflineEmissionsTracker
 
+from carbontracker.tracker import CarbonTracker
+from carbontracker import parser
+
 import logging
 logging.basicConfig(level="DEBUG")
 
@@ -61,19 +64,26 @@ def my_experiment(log_dir, n_steps=100) -> None:
     tracker_CC.start()
 
     ## exp-impact-tracker
-    tracker = ImpactTracker(log_dir)
-    tracker.launch_impact_monitor()
+    tracker_EIT = ImpactTracker(log_dir)
+    tracker_EIT.launch_impact_monitor()
 
+    ## CarbonTracker
+    tracker_CT = CarbonTracker(epochs=1, log_dir=log_dir)
+    tracker_CT.epoch_start()
+        
     exp = Experiment()
 
-    for t in range(n_steps):
+    for t in range(n_steps):        
         if t % (n_steps//10) == 0:
             print(f"Pass: {t}")
             # Optional. Adding this will ensure that your experiment stops if impact tracker throws an exception and exit.
-            tracker.get_latest_info_and_check_for_errors()
+            tracker_EIT.get_latest_info_and_check_for_errors()
         exp.train()
 
     tracker_CC.stop()
+    
+    tracker_CT.epoch_end()
+
     print(f"Please find your experiment logs in: {log_dir}")
 
 
@@ -86,14 +96,24 @@ if __name__ == "__main__":
 
     # exp-impact-tracker logs
     data_interface1 = DataInterface([log_dir])
-    exp_impact_tracker_power = data_interface1.total_power
-    exp_impact_tracker_duration = data_interface1.exp_len_hours * 3600
+    EIT_energy_consumed = data_interface1.total_power
+    EIT_duration = data_interface1.exp_len_hours * 3600
 
     # code-carbon logs
-    cc_df = pd.read_csv(f'{log_dir}/emissions.csv')
-    cc_duration = cc_df['duration'].values[0]
-    cc_energy_consumed = cc_df['energy_consumed'].values[0]
+    CC_df = pd.read_csv(f'{log_dir}/emissions.csv')
+    CC_duration = CC_df['duration'].values[0]
+    CC_energy_consumed = CC_df['energy_consumed'].values[0]
 
-    print(f'runtimes (sec) exp-impact-tracker: {exp_impact_tracker_duration}, code-carbon: {cc_duration}')
-    print(f'total power from exp-impact-tracker: {exp_impact_tracker_power}\nenergy consumed from code-carbon: {cc_energy_consumed}')
+    # CarbonTracker logs
+    logs = parser.parse_all_logs(log_dir=log_dir)   
+    first_log = logs[0]
+    CT_duration = first_log['actual']['duration (s)']
+    CT_energy_consumed = first_log['actual']['energy (kWh)']
+    
+    print('')
+    print(f'runtimes (sec): \nexp-impact-tracker: {EIT_duration:.3f}\ncode-carbon: {CC_duration:.3f}\ncarbon-tracker: {CT_duration:.3f}')
+    print('')
+    print(f'total power (kwh):\nexp-impact-tracker: {EIT_energy_consumed:.6f}\nenergy consumed from code-carbon: {CC_energy_consumed:.6f}\ncarbon-tracker: {CT_energy_consumed:.6f}')
+
+
 

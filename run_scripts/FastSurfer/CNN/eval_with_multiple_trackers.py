@@ -31,9 +31,6 @@ from skimage.measure import label
 from collections import OrderedDict
 from os import makedirs
 
-# FastSurfer repo
-# sys.path.append('../../../../FastSurfer/FastSurferCNN')
-
 from FastSurferCNN.data_loader.load_neuroimaging_data import OrigDataThickSlices
 from FastSurferCNN.data_loader.load_neuroimaging_data import map_label2aparc_aseg
 from FastSurferCNN.data_loader.load_neuroimaging_data import map_prediction_sagittal2full
@@ -48,8 +45,10 @@ from ptflops import get_model_complexity_info
 from pypapi import events, papi_high as high
 
 # Carbon costs
-# sys.path.append('../../../../experiment-impact-tracker/')
 from experiment_impact_tracker.compute_tracker import ImpactTracker
+from codecarbon import EmissionsTracker, OfflineEmissionsTracker
+from carbontracker.tracker import CarbonTracker
+from carbontracker import parser
 
 
 HELPTEXT = """
@@ -136,6 +135,7 @@ def options_parse():
     parser.add_argument('--simple_run', action='store_true', default=False,
                         help='Simplified run: only analyse one given image specified by --in_name (output: --out_name). '
                              'Need to specify absolute path to both --in_name and --out_name if this option is chosen.')
+
     sel_option = parser.parse_args()
 
     if sel_option.input is None and sel_option.csv_file is None and not sel_option.simple_run:
@@ -205,7 +205,7 @@ def run_network(img_filename, orig_data, prediction_probability, plane, ckpts, p
     # Set up state dict for model
     logger.info("Loading {} Net from {}".format(plane, ckpts))
 
-    model = torch.load(ckpts, map_location=params_model["device"])
+    model_state = torch.load(ckpts, map_location=params_model["device"])
 
     new_state_dict = OrderedDict()
 
@@ -536,20 +536,35 @@ if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
     logger.addHandler(logging.StreamHandler(stream=sys.stdout))
 
-    # Set up the tracker
     now = datetime.now()
-    # dt_string = now.strftime("%b-%d-%Y-%H-%M-%S")
-    log_dir = '{}/{}/'.format(options.tracker_log_dir, options.search_tag)
+    log_dir = f'{options.tracker_log_dir}/{options.search_tag}/'
 
+    # Tracker logs
+    log_dir_EIT = f'{log_dir}/EIT/'
+    log_dir_CC = f'{log_dir}/CC/'
+    log_dir_CT = f'{log_dir}/CT/'
+
+    for d in [log_dir_EIT,log_dir_CC,log_dir_CT]:
+        if not op.exists(d):
+            makedirs(d)
+
+    # Set HPC location
     geo_loc = options.geo_loc
     ly,lx = float(geo_loc.split(',')[0]), float(geo_loc.split(',')[1])
     coords = (ly,lx)
     
-    # Init tracker with log path
-    tracker = ImpactTracker(log_dir,coords)
-    # Start tracker in a separate process
-    tracker.launch_impact_monitor()
+    ## exp-impact-tracker (this exits automatically after script ends)
+    tracker_EIT = ImpactTracker(log_dir_EIT)
+    tracker_EIT.launch_impact_monitor()
 
+    ## code-carbon tracker
+    tracker_CC = EmissionsTracker(output_dir=log_dir_CC) 
+    tracker_CC.start()
+
+    ## CarbonTracker (keep epoch=1 for non DL models)
+    tracker_CT = CarbonTracker(epochs=1, log_dir=log_dir_CT)
+    tracker_CT.epoch_start()
+    
     if options.simple_run:
         print('Staring a simple run...')
         # Check if output subject directory exists and create it otherwise
@@ -613,6 +628,16 @@ if __name__ == "__main__":
 
             # Check experiment tracker status
             # Optional. Adding this will ensure that your experiment stops if impact tracker throws an exception and exit.
-            tracker.get_latest_info_and_check_for_errors()
+            tracker_EIT.get_latest_info_and_check_for_errors()
+
+        ## code-carbon tracker
+        tracker_CC.stop()
+        
+        ## CarbonTracker
+        tracker_CT.epoch_end()
+
+        print(f"Please find your experiment logs in: {log_dir}")
 
         sys.exit(0)
+
+    
