@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 setup(
     name="watts_up_compute",
-    packages=find_packages(include=['watts_up_compute','utils']),
+    packages=find_packages(include=['utils']),
     install_requires=[
         "APScheduler>=3.7.0"
         "arrow>=1.1.1"

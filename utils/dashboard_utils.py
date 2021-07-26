@@ -17,7 +17,9 @@ from experiment_impact_tracker.data_utils import (load_data_into_frame,
 
 
 def compute_aggregate_power(df, info, PUE, task_epoch_df,use_cuda):
-    ''' Aggregates and partitions power consumption based on task interval timpestamps. This function is similar to https://github.com/nikhil153/experiment-impact-tracker/blob/master/experiment_impact_tracker/utils.py, but partitioned according to different tasks in the pipeline (e.g. setup, predict, aggregate)'''
+    ''' Aggregates and partitions power consumption based on task interval timpestamps. Allows to see breakdown of power consumptions for different subtasks.
+    
+    '''
 
     # time calcs
     exp_end_timestamp = datetime.timestamp(info["experiment_end"])
@@ -97,7 +99,7 @@ def compute_aggregate_power(df, info, PUE, task_epoch_df,use_cuda):
     return df, task_power_df
 
 
-def get_tracker_data(experiment_name, logdir, use_cuda, read_flops):
+def get_ETI_tracker_data(experiment_name, logdir, use_cuda, read_flops):
     ''' Fetches experiment impact tracker data from data_interface and separates it into 1) end-to-end experiment df 2) power consumption per sampling epoch df and 3) flops and power consumption per task df
     '''
     try:
@@ -162,7 +164,7 @@ def get_tracker_data(experiment_name, logdir, use_cuda, read_flops):
         return None
  
 
-def collate_tracker_data(tracker_log_dir, exp_list, use_cuda, read_flops):
+def collate_ETI_tracker_data(tracker_log_dir, exp_list, use_cuda, read_flops):
     ''' Collates tracker data from a set of experiments e.g. FastSurfer results for all subjects
     '''
     experiment_dict = {}
@@ -175,7 +177,7 @@ def collate_tracker_data(tracker_log_dir, exp_list, use_cuda, read_flops):
     flops_df_concat = pd.DataFrame()
     tracker_summary_df_concat = pd.DataFrame()
 
-    values = [delayed(get_tracker_data)(k, v[0], v[1], read_flops) 
+    values = [delayed(get_ETI_tracker_data)(k, v[0], v[1], read_flops) 
               for k,v in experiment_dict.items()]
 
     tracker_data_list = compute(*values, scheduler='threads',num_workers=4) 

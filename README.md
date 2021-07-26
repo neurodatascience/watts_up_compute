@@ -32,7 +32,7 @@
 <img src="figures/Watts_up_compute_org.jpg" alt="Drawing" align="middle" width="800px"/>
 
 
-## Current results
+## Preliminary results on a pilot sample
 
 - Datasets: [UK Biobank sample](https://www.ukbiobank.ac.uk/enable-your-research/register) (N=72)
 - Pipelines: [FreeSurfer 6.0](https://surfer.nmr.mgh.harvard.edu/) implementation with [Nipype](https://nipype.readthedocs.io/en/latest/users/examples/smri_fsreconall.html) vs. [FastSurfer]((https://github.com/Deep-MI/FastSurfer)) (deep-learning approach) 
@@ -47,10 +47,11 @@
 <img src="figures/FreeSurfer_FastSurfer.png" alt="Drawing" align="middle" width="800px"/>
 
 
-### Benchmark:
+### Compute cost benchmarks:
+Note: The values in table are for processing of a single scan. A typical inference/deployment pipeline may do ~10k of these runs for a large dataset. And a model training/development pipeline may incur over 1M runs. 
+
 
 |        Pipeline (single run)  | Runtime (hrs): CPU        | Runtime (hrs): GPU        | Power (W-hrs): CPU          | Power (W-hrs): GPU        |  Carbon Emissions (grams): CPU        |  Carbon Emissions (grams): GPU        |
 |-----------------------------------------------------|------------|------------|------------|------------|------------|------------|
 | FreeSurfer    | 8.3 (1.03) | N/A        | 108.5 (19.8) | N/A        | 3.26 (0.5) | N/A        |
 | FastSurfer    | 9.8 (0.74) | 1.6 (0.47) | 126.4 (16.1) | 26.7 (7.7) | 3.79 (0.5) | 0.80 (0.2) |
-
