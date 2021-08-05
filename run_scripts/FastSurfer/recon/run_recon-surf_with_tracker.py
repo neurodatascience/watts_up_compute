@@ -12,9 +12,9 @@ from ptflops import get_model_complexity_info
 from pypapi import events, papi_high as high
 
 # experiment tracker
-sys.path.append('../')
-sys.path.append('../../')
-sys.path.append('../../experiment-impact-tracker/')
+# sys.path.append('../')
+# sys.path.append('../../')
+# sys.path.append('../../experiment-impact-tracker/')
 from experiment_impact_tracker.compute_tracker import ImpactTracker
 
 
