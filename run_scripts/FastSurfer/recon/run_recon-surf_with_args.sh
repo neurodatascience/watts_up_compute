@@ -1,8 +1,11 @@
 #!/bin/bash
 
-echo "sourcing FreeSurfer env"
+echo "sourcing FreeSurfer env var" 
 export FREESURFER_HOME=/opt/freesurfer/
 source $FREESURFER_HOME/SetUpFreeSurfer.sh
+
+echo "sourcing FastSurfer env var"
+export FASTSURFER_HOME=/home/nikhil/FastSurfer
 
 subject_id=$1
 run_id=$2

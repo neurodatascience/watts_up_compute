@@ -14,9 +14,11 @@ from pypapi import events, papi_high as high
 # experiment tracker
 # sys.path.append('../')
 # sys.path.append('../../')
-# sys.path.append('../../experiment-impact-tracker/')
+sys.path.append('../../../../experiment-impact-tracker/')
 from experiment_impact_tracker.compute_tracker import ImpactTracker
 
+sys.path.append('../../../../codecarbon/')
+from codecarbon import EmissionsTracker, OfflineEmissionsTracker
 
 HELPTEXT = """
 Script to run recon-all with impact-tracker
@@ -61,16 +63,20 @@ if __name__ == "__main__":
 
     # Set up the tracker
     log_dir = '{}/{}/'.format(args.tracker_log_dir,args.subject_id)
+    log_dir_EIT = f'{log_dir}/EIT/'
+    log_dir_CC = f'{log_dir}/CC/'
 
     geo_loc = args.geo_loc
     ly,lx = float(geo_loc.split(',')[0]), float(geo_loc.split(',')[1])
     coords = (ly,lx)
 
-    # Init tracker with log path
-    tracker = ImpactTracker(log_dir,coords)
+    # EIT tracker
+    tracker_EIT = ImpactTracker(log_dir_EIT,coords)
+    tracker_EIT.launch_impact_monitor()
 
-    # Start tracker in a separate process
-    tracker.launch_impact_monitor()
+    # CodeCarbon tracker
+    tracker_CC = EmissionsTracker(output_dir=log_dir_CC) 
+    tracker_CC.start()
 
     # PAPI
     papi_csv = '{}/{}/compute_costs_flop.csv'.format(args.tracker_log_dir,args.subject_id)
@@ -99,6 +105,9 @@ if __name__ == "__main__":
 
     returned_value = subprocess.call(cmd, shell=True)  # returns the exit code in unix
     print('returned value:', returned_value)
+    
+    ## code-carbon tracker
+    tracker_CC.stop()
 
     DP = high.stop_counters()[0]
     end_time = time.time()
