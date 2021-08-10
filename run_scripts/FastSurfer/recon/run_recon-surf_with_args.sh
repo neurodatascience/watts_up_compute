@@ -9,16 +9,22 @@ export FASTSURFER_HOME=/home/nikhil/projects/green_comp_neuro/FastSurfer
 
 subject_id=$1
 run_id=$2
+hpc=$3
 
 [[ -z $subject_id ]] && exit 1
 [[ -z $run_id ]] && exit 1
 
-# IMG_DATA_DIR="/neurohub/ukbb/imaging/" 
-# SEG_DATA_DIR="/home/nikhil/green_compute/ukb_pilot/fastsurfer/recon-surf/prune_50/" 
-# INPUT_FILE_NAME="ses-2/anat/${subject_id}_ses-2_T1w.nii.gz"
-IMG_DATA_DIR="/home/nikhil/projects/green_comp_neuro/watts_up_compute/local_test_data/mni/" 
-SEG_DATA_DIR="/home/nikhil/projects/green_comp_neuro/watts_up_compute/proc_output/FastSurfer/CNN/local_tests/RUN_1/" 
-INPUT_FILE_NAME="${subject_id}_ses-1_run-1_desc-preproc_T1w.nii.gz"
+if [ -z $hpc]; then
+    echo "Using local data"
+    IMG_DATA_DIR="/home/nikhil/projects/green_comp_neuro/watts_up_compute/local_test_data/mni/" 
+    SEG_DATA_DIR="/home/nikhil/projects/green_comp_neuro/watts_up_compute/proc_output/FastSurfer/CNN/local_tests/RUN_1/" 
+    INPUT_FILE_NAME="${subject_id}_ses-1_run-1_desc-preproc_T1w.nii.gz"
+else
+    echo "Using HPC data"
+    IMG_DATA_DIR="/neurohub/ukbb/imaging/" 
+    SEG_DATA_DIR="/home/nikhil/green_compute/ukb_pilot/fastsurfer/recon-surf/prune_50/" 
+    INPUT_FILE_NAME="ses-2/anat/${subject_id}_ses-2_T1w.nii.gz"
+fi
 
 FS_LICENSE="$FREESURFER_HOME/license.txt"
 
@@ -33,4 +39,6 @@ python3 run_recon-surf_with_tracker.py \
     --input_file_name $INPUT_FILE_NAME \
     --fs_license $FS_LICENSE \
     --tracker_log_dir "/output/tracker_logs/${run_id}" \
-    --geo_loc "45.4972159,-73.6103642" 
+    --geo_loc "45.4972159,-73.6103642" \
+    --CC_offline
+
