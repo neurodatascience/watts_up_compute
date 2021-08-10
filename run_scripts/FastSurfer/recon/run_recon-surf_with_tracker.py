@@ -4,6 +4,7 @@ import nibabel as nib
 import numpy as np
 import time
 import sys
+import os
 import subprocess
 
 # Compute costs
@@ -11,9 +12,9 @@ import pandas as pd
 from ptflops import get_model_complexity_info
 from pypapi import events, papi_high as high
 
-# experiment tracker
-# sys.path.append('../')
-# sys.path.append('../../')
+# Add paths (singularity should see these)
+sys.path.append('../../../FastSurfer/')
+
 sys.path.append('../../../../experiment-impact-tracker/')
 from experiment_impact_tracker.compute_tracker import ImpactTracker
 
@@ -66,6 +67,10 @@ if __name__ == "__main__":
     log_dir_EIT = f'{log_dir}/EIT/'
     log_dir_CC = f'{log_dir}/CC/'
 
+    for d in [log_dir_EIT,log_dir_CC]:
+        if not os.path.exists(d):
+            os.makedirs(d)
+
     geo_loc = args.geo_loc
     ly,lx = float(geo_loc.split(',')[0]), float(geo_loc.split(',')[1])
     coords = (ly,lx)
@@ -75,14 +80,16 @@ if __name__ == "__main__":
     tracker_EIT.launch_impact_monitor()
 
     # CodeCarbon tracker
-    tracker_CC = EmissionsTracker(output_dir=log_dir_CC) 
+    os.environ['TZ']= 'America/New_York'
+    # tracker_CC = EmissionsTracker(output_dir=log_dir_CC) 
+    tracker_CC = OfflineEmissionsTracker(output_dir=log_dir_CC, country_iso_code="USA")
     tracker_CC.start()
 
     # PAPI
-    papi_csv = '{}/{}/compute_costs_flop.csv'.format(args.tracker_log_dir,args.subject_id)
-    papi_df = pd.DataFrame(columns=['task','start_time','duration','DP'])
+    # papi_csv = '{}/{}/compute_costs_flop.csv'.format(args.tracker_log_dir,args.subject_id)
+    # papi_df = pd.DataFrame(columns=['task','start_time','duration','DP'])
    
-    high.start_counters([events.PAPI_DP_OPS,]) #default: PAPI_FP_OPS, PAPI_SP_OPS gives zeros
+    # high.start_counters([events.PAPI_DP_OPS,]) #default: PAPI_FP_OPS, PAPI_SP_OPS gives zeros
     
     start_time = time.time()
 
@@ -109,9 +116,10 @@ if __name__ == "__main__":
     ## code-carbon tracker
     tracker_CC.stop()
 
-    DP = high.stop_counters()[0]
-    end_time = time.time()
-    recon_time = end_time - start_time
-    papi_df.loc[0] = ['recon', start_time, recon_time, DP]
+    # DP = high.stop_counters()[0]
+    # end_time = time.time()
+    # recon_time = end_time - start_time
+   
+    # papi_df.loc[0] = ['recon', start_time, recon_time, DP]
 
-    papi_df.to_csv(papi_csv)
+    # papi_df.to_csv(papi_csv)
