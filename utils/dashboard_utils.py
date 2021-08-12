@@ -99,86 +99,78 @@ def compute_aggregate_power(df, info, PUE, task_epoch_df,use_cuda):
     return df, task_power_df
 
 
-def get_ETI_tracker_data(experiment_name, logdir, use_cuda, read_flops):
+def get_EIT_tracker_data(logdir, use_cuda, read_flops):
     ''' Fetches experiment impact tracker data from data_interface and separates it into 1) end-to-end experiment df 2) power consumption per sampling epoch df and 3) flops and power consumption per task df
     '''
-    try:
-        info = load_initial_info(logdir)
+    # try:
+    info = load_initial_info(logdir)
+    
+    # Get total values from default data interface for the entire experiment 
+    data_interface = DataInterface([logdir])
+    total_power = data_interface.total_power
+    total_carbon = data_interface.kg_carbon
+    PUE = data_interface.PUE
+    exp_len_hours = data_interface.exp_len_hours
+
+    # Calculate your own sepeartely for each subtask in the experiment
+    # impact tracker log
+    tracker_df =  load_data_into_frame(logdir)
+
+    if use_cuda:
+        power_df = tracker_df[0][['timestamp','rapl_power_draw_absolute','rapl_estimated_attributable_power_draw','nvidia_draw_absolute','nvidia_estimated_attributable_power_draw']].copy()
+        power_df.loc[:,'total_attributable_power_draw'] = power_df['rapl_estimated_attributable_power_draw'] + power_df['nvidia_estimated_attributable_power_draw']
+
+    else:
+        power_df = tracker_df[0][['timestamp','rapl_power_draw_absolute','rapl_estimated_attributable_power_draw']].copy()
+        power_df.loc[:,'total_attributable_power_draw'] = power_df['rapl_estimated_attributable_power_draw']
         
-        # Get total values from default data interface for the entire experiment 
-        data_interface = DataInterface([logdir])
-        total_power = data_interface.total_power
-        total_carbon = data_interface.kg_carbon
-        PUE = data_interface.PUE
-        exp_len_hours = data_interface.exp_len_hours
+    # start time from 0
+    power_df.loc[:,'timestamp_orig'] = power_df['timestamp']
+    power_df.loc[:,'timestamp'] = power_df['timestamp'] - power_df['timestamp'][0]
 
-        # Calculate your own sepeartely for each subtask in the experiment
-        # impact tracker log
-        tracker_df =  load_data_into_frame(logdir)
+    # papi log
+    flops_df = None
+    total_duration = 0
+    if read_flops:
+        compute_flops_csv = logdir + 'compute_costs_flop.csv'
+        flops_df = pd.read_csv(compute_flops_csv)
+    
+        flops_df.loc[:,'start_time'] = flops_df['start_time'] - flops_df['start_time'][0]
 
-        if use_cuda:
-            power_df = tracker_df[0][['timestamp','rapl_power_draw_absolute','rapl_estimated_attributable_power_draw','nvidia_draw_absolute','nvidia_estimated_attributable_power_draw']].copy()
-            power_df.loc[:,'total_attributable_power_draw'] = power_df['rapl_estimated_attributable_power_draw'] + power_df['nvidia_estimated_attributable_power_draw']
+        # Aggregate power draws per epoch for each papi context calculation (i.e. setup, axial, aggr etc))
+        epoch_power_draw_list = []
+        epoch_timestamps = list(flops_df['start_time'].values[1:]) + [flops_df['start_time'].values[-1] + flops_df['duration'].values[-1]]
 
-        else:
-            power_df = tracker_df[0][['timestamp','rapl_power_draw_absolute','rapl_estimated_attributable_power_draw']].copy()
-            power_df.loc[:,'total_attributable_power_draw'] = power_df['rapl_estimated_attributable_power_draw']
-            
-        # start time from 0
-        power_df.loc[:,'timestamp_orig'] = power_df['timestamp']
-        power_df.loc[:,'timestamp'] = power_df['timestamp'] - power_df['timestamp'][0]
-        power_df.loc[:,'experiment_name'] = experiment_name
-
-        # papi log
-        flops_df = None
-        total_duration = 0
-        if read_flops:
-            compute_flops_csv = logdir + 'compute_costs_flop.csv'
-            flops_df = pd.read_csv(compute_flops_csv)
-            flops_df.loc[:,'experiment_name'] = experiment_name
+        task_epoch_df = pd.DataFrame()
+        task_epoch_df.loc[:,'task'] = flops_df['task'].values
+        task_epoch_df.loc[:,'epoch_timestamp'] = epoch_timestamps
         
-            flops_df.loc[:,'start_time'] = flops_df['start_time'] - flops_df['start_time'][0]
+        power_df, task_power_df = compute_aggregate_power(power_df, info, PUE, task_epoch_df, use_cuda)
+        flops_df = pd.merge(flops_df,task_power_df,on='task',how='left')
 
-            # Aggregate power draws per epoch for each papi context calculation (i.e. setup, axial, aggr etc))
-            epoch_power_draw_list = []
-            epoch_timestamps = list(flops_df['start_time'].values[1:]) + [flops_df['start_time'].values[-1] + flops_df['duration'].values[-1]]
+        print('total_power sanity check: default: {:6.5f}, calculated: {:6.5f}, {:6.5f}'.format(total_power, task_power_df.loc[0,'power'],power_df['total_power_per_timestep'].sum()))
+    
+    total_duration_papi = (power_df['timestamp'].values[-1]-power_df['timestamp'].values[0])/3600
 
-            task_epoch_df = pd.DataFrame()
-            task_epoch_df.loc[:,'task'] = flops_df['task'].values
-            task_epoch_df.loc[:,'epoch_timestamp'] = epoch_timestamps
-            
-            power_df, task_power_df = compute_aggregate_power(power_df, info, PUE, task_epoch_df, use_cuda)
-            flops_df = pd.merge(flops_df,task_power_df,on='task',how='left')
+    tracker_summary_df = pd.DataFrame(columns=['total_power','total_carbon','PUE','total_duration_papi','total_duration_impact_tracker'])
+    tracker_summary_df.loc[0] = [total_power,total_carbon,PUE,total_duration_papi,exp_len_hours]
 
-            print('total_power sanity check: default: {:6.5f}, calculated: {:6.5f}, {:6.5f}'.format(total_power, task_power_df.loc[0,'power'],power_df['total_power_per_timestep'].sum()))
-        
-        total_duration_papi = (power_df['timestamp'].values[-1]-power_df['timestamp'].values[0])/3600
+    return power_df, flops_df, tracker_summary_df
 
-        tracker_summary_df = pd.DataFrame(columns=['experiment_name','total_power','total_carbon','PUE','total_duration_papi','total_duration_impact_tracker'])
-        tracker_summary_df.loc[0] = [experiment_name,total_power,total_carbon,PUE,total_duration_papi,exp_len_hours]
-
-        return power_df, flops_df, tracker_summary_df
-
-    except:
-        print('No valid experiment impact tracker log found for: {} at {}'.format(experiment_name, logdir))
-        return None
+    # except:
+        # print(f'No valid experiment impact tracker log found at {logdir}')
+        # return None
  
 
-def collate_ETI_tracker_data(tracker_log_dir, exp_list, use_cuda, read_flops):
-    ''' Collates tracker data from a set of experiments e.g. FastSurfer results for all subjects
+def collate_EIT_tracker_data(tracker_log_dir_list, use_cuda, read_flops):
+    ''' Collates EIT tracker data from a set of experiments e.g. FastSurfer results for all subjects
     '''
-    experiment_dict = {}
-    for id in exp_list:
-        # reconall 
-        tracker_path = tracker_log_dir + 'sub-{}/'.format(id)
-        experiment_dict[id] = (tracker_path, use_cuda)
-
     power_df_concat = pd.DataFrame()
     flops_df_concat = pd.DataFrame()
     tracker_summary_df_concat = pd.DataFrame()
 
-    values = [delayed(get_ETI_tracker_data)(k, v[0], v[1], read_flops) 
-              for k,v in experiment_dict.items()]
+    values = [delayed(get_EIT_tracker_data)(tracker_log_dir, use_cuda, read_flops) 
+              for tracker_log_dir in tracker_log_dir_list]
 
     tracker_data_list = compute(*values, scheduler='threads',num_workers=4) 
 
@@ -191,3 +183,13 @@ def collate_ETI_tracker_data(tracker_log_dir, exp_list, use_cuda, read_flops):
             tracker_summary_df_concat = tracker_summary_df_concat.append(tracker_summary_df)
 
     return tracker_summary_df_concat, flops_df_concat, power_df_concat
+
+
+def collate_CC_tracker_data(log_dirs):
+    ''' Collates CodeCarbon tracker data from a set of experiments e.g. FastSurfer results for all subjects
+    '''
+    CC_df = pd.DataFrame()
+    for log_dir in log_dirs:
+        df = pd.read_csv(f'{log_dir}/emissions.csv')
+        CC_df = CC_df.append(df)
+    return CC_df

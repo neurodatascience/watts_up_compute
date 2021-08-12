@@ -51,8 +51,7 @@ parser.add_argument('--geo_loc', dest='geo_loc',
                     type=str, default='45.4972159,-73.6103642') #MTL Beluga
 parser.add_argument('--CC_offline',
                     help="Run CC in offline mode",
-                    action='store_true')
-                    
+                    action='store_true')                 
 parser.add_argument('--TZ', dest='TZ',
                     help="TimeZone",
                     type=str, default='America/New_York')
@@ -79,6 +78,8 @@ if __name__ == "__main__":
     count_FLOPs = args.count_FLOPs
 
     # Trackers
+    tracker_log_dir = args.tracker_log_dir
+    geo_loc = args.geo_loc
     CC_offline = args.CC_offline
     TZ = args.TZ
     iso_code = args.iso_code
@@ -93,7 +94,7 @@ if __name__ == "__main__":
     print(f'Starting subject: {subject_id}')
 
     # Set up the trackers
-    log_dir = '{}/{}/'.format(args.tracker_log_dir,args.subject_id)
+    log_dir = '{}/{}/'.format(tracker_log_dir,subject_id)
     log_dir_EIT = f'{log_dir}/EIT/'
     log_dir_CC = f'{log_dir}/CC/'
 
@@ -101,9 +102,10 @@ if __name__ == "__main__":
         if not os.path.exists(d):
             os.makedirs(d)
 
-    geo_loc = args.geo_loc
+    # Use specified geo location for the HPC
     ly,lx = float(geo_loc.split(',')[0]), float(geo_loc.split(',')[1])
     coords = (ly,lx)
+    print(f'Using geographical coordinates (long,lat): {coords}')
 
     # EIT tracker
     tracker_EIT = ImpactTracker(log_dir_EIT,coords)

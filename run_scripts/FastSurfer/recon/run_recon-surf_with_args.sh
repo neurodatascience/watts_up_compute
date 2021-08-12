@@ -27,8 +27,7 @@ else
 fi
 
 FS_LICENSE="$FREESURFER_HOME/license.txt"
-
-echo $FS_LICENSE
+echo "FreeSurfer license at: $FS_LICENSE"
 
 echo "Starting recon all with tracker..."
 
