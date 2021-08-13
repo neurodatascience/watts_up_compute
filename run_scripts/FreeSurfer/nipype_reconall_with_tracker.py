@@ -13,8 +13,8 @@ import argparse
 # Add paths (singularity should see these)
 # FastSurfer and carbon trackers are in the mounted dir as these repos keep getting updated.
 # TODO replace this with setup.py once the dependencis become stable
-sys.path.append('../../../experiment-impact-tracker/')
-sys.path.append('../../../codecarbon/')
+# sys.path.append('../../../experiment-impact-tracker/')
+# sys.path.append('../../../codecarbon/')
 
 from experiment_impact_tracker.compute_tracker import ImpactTracker
 from codecarbon import EmissionsTracker, OfflineEmissionsTracker
