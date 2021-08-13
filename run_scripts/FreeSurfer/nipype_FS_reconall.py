@@ -185,6 +185,9 @@ def main():
 
             flop_df.loc[r] = [recon_directive,start_time, duration, DP]
 
+    ## code-carbon tracker
+    tracker_CC.stop()
+    
     if count_FLOPs:
         flop_df.to_csv(flop_csv)
 
