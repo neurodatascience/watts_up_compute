@@ -105,13 +105,28 @@ def options_parse():
     parser.add_argument('--mock_run', dest='mock_run',
                         help="run without inference: 1, run only Axial model: 2",
                         type=int, default=1)
+
+    # Tracker options
     parser.add_argument('--geo_loc', dest='geo_loc',
                         help="(lat,log) coords for experiment impact tracker",
                         type=str, default='45.4972159,-73.6103642') #MTL Beluga
     parser.add_argument('--tracker_log_dir', dest='tracker_log_dir',
                         help="log dir for experiment impact tracker",
                         type=str, default='./tracker_logs/')
-    
+    parser.add_argument('--CC_offline',
+                        help="Run CC in offline mode",
+                        action='store_true')                 
+    parser.add_argument('--TZ', dest='TZ',
+                        help="TimeZone",
+                        type=str, default='America/New_York')
+    parser.add_argument('--iso_code', dest='iso_code',
+                        help="Country ISO code",
+                        type=str, default='USA')
+
+    # PAPI
+    parser.add_argument('--count_FLOPs', dest='count_FLOPs',
+                    help="Count FLOPs using PAPI",
+                    action='store_true') 
 
     # 5. Options for model parameters setup (only change if model training was changed)
     parser.add_argument('--num_filters', type=int, default=64,
@@ -358,9 +373,10 @@ def fastsurfercnn(img_filename, save_as, logger, args):
     # Set up tensor to hold probabilities
     pred_prob = torch.zeros((256, 256, 256, args.num_classes_ax_cor), dtype=torch.float)
 
-    # DP = high.stop_counters()[0]
     end_time = time.time()
     setup_time = end_time - start_time
+
+    # DP = high.stop_counters()[0]
     # papi_df.loc[0] = ['setup', start_time, setup_time, DP]
 
     # MAC counters (ignoring this part from FLOP counter)
@@ -384,10 +400,11 @@ def fastsurfercnn(img_filename, save_as, logger, args):
                                 params_model, model, logger)
 
         print("Axial View Tested in {:0.4f} seconds".format(time.time() - start_time))
-
-    # DP = high.stop_counters()[0]
+    
     end_time = time.time()
     axial_time = end_time - start_time
+
+    # DP = high.stop_counters()[0]
     # papi_df.loc[1] = ['axial', start_time, axial_time, DP]
 
     # Coronal Prediction #trainable:1799206
@@ -402,9 +419,10 @@ def fastsurfercnn(img_filename, save_as, logger, args):
 
         logger.info("Coronal View Tested in {:0.4f} seconds".format(time.time() - start_time))
 
-    # DP = high.stop_counters()[0]
     end_time = time.time()
     coronal_time = end_time - start_time
+
+    # DP = high.stop_counters()[0]
     # papi_df.loc[2] = ['Coronal', start_time, coronal_time, DP]
 
     # Sagittal Prediction #trainable:1797386
@@ -427,14 +445,16 @@ def fastsurfercnn(img_filename, save_as, logger, args):
                                 params_model, model, logger)
 
         logger.info("Sagittal View Tested in {:0.4f} seconds".format(time.time() - start_time))
-        
-    # DP = high.stop_counters()[0]
+            
     end_time = time.time()
     sagittal_time = end_time - start_time
+
+    # DP = high.stop_counters()[0]
     # papi_df.loc[3] = ['Sagittal', start_time, sagittal_time, DP]
 
     # Aggregation and postprocessing:
     # high.start_counters([events.PAPI_DP_OPS,]) #default: PAPI_FP_OPS
+    
     start_time  = time.time()
 
     if mock_run != 1:
@@ -517,11 +537,12 @@ def fastsurfercnn(img_filename, save_as, logger, args):
         logger.info("Saving Segmentation to {}".format(save_as))
         logger.info("Total processing time: {:0.4f} seconds.".format(time.time() - start_total))
     
-    # DP = high.stop_counters()[0]
+    
     end_time = time.time()
     agg_time = end_time - start_time
+
+    # DP = high.stop_counters()[0]
     # papi_df.loc[4] = ['aggregate', start_time, agg_time, DP]
-    
     # papi_df['MAC'] = macs
     # papi_df['params'] = params
     # papi_df.to_csv(papi_csv)
@@ -537,19 +558,28 @@ if __name__ == "__main__":
     logger.addHandler(logging.StreamHandler(stream=sys.stdout))
 
     now = datetime.now()
-    log_dir = f'{options.tracker_log_dir}/{options.search_tag}/'
+
+    # Trackers
+    geo_loc = options.geo_loc
+    CC_offline = options.CC_offline
+    TZ = options.TZ
+    iso_code = options.iso_code
+
+    tracker_log_dir = f'{options.tracker_log_dir}/{options.search_tag}/'
 
     # Tracker logs
-    log_dir_EIT = f'{log_dir}/EIT/'
-    log_dir_CC = f'{log_dir}/CC/'
-    log_dir_CT = f'{log_dir}/CT/'
+    log_dir_EIT = f'{tracker_log_dir}/EIT/'
+    log_dir_CC = f'{tracker_log_dir}/CC/'
+    log_dir_CT = f'{tracker_log_dir}/CT/'
 
     for d in [log_dir_EIT,log_dir_CC,log_dir_CT]:
         if not op.exists(d):
             makedirs(d)
 
+     # FLOPs
+    count_FLOPs = options.count_FLOPs #TODO implement this in the main function
+
     # Set HPC location
-    geo_loc = options.geo_loc
     ly,lx = float(geo_loc.split(',')[0]), float(geo_loc.split(',')[1])
     coords = (ly,lx)
     
@@ -558,7 +588,16 @@ if __name__ == "__main__":
     tracker_EIT.launch_impact_monitor()
 
     ## code-carbon tracker
-    tracker_CC = EmissionsTracker(output_dir=log_dir_CC) 
+    print(f'Using offline mode for CC tracker: {CC_offline}')
+    if CC_offline:
+        print(f'Using {TZ} timezone and {iso_code} country iso code')
+    
+    if CC_offline:
+        tracker_CC = OfflineEmissionsTracker(output_dir=log_dir_CC, country_iso_code=iso_code)        
+    else:
+        tracker_CC = EmissionsTracker(output_dir=log_dir_CC) 
+        
+
     tracker_CC.start()
 
     ## CarbonTracker (keep epoch=1 for non DL models)
@@ -636,6 +675,6 @@ if __name__ == "__main__":
         ## CarbonTracker
         tracker_CT.epoch_end()
 
-        print(f"Please find your experiment logs in: {log_dir}")
+        print(f"Please find your experiment logs in: {tracker_log_dir}")
 
         sys.exit(0)

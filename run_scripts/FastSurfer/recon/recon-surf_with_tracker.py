@@ -30,7 +30,7 @@ Date: Apr-28-2021
 
 parser = argparse.ArgumentParser(description=HELPTEXT)
 
-# input data
+# data
 parser.add_argument('--subject_id', dest='subject_id', default="sub-000",
                     help='subject id')
 parser.add_argument('--img_data_dir', dest='img_data_dir', default="./",
@@ -39,6 +39,8 @@ parser.add_argument('--seg_data_dir', dest='seg_data_dir', default="./",
                     help='seg_data_dir id')                    
 parser.add_argument('--input_file_name', dest='input_file_name', default="./",
                     help='input_file_name')
+parser.add_argument('--output_data_dir', dest='output_data_dir', default="./output",
+                    help='freesurfer derivative dir')
 parser.add_argument('--fs_license', dest='fs_license', default="./fs_license.txt",
                     help='fs_license')
 
@@ -72,6 +74,7 @@ if __name__ == "__main__":
     img_data_dir = args.img_data_dir
     seg_data_dir = args.seg_data_dir
     input_file_name = args.input_file_name
+    output_data_dir = args.output_data_dir
     fs_license = args.fs_license
 
     # FLOPs
@@ -115,10 +118,10 @@ if __name__ == "__main__":
     os.environ['TZ']= TZ
     
     if CC_offline:
-        tracker_CC = EmissionsTracker(output_dir=log_dir_CC) 
+        tracker_CC = OfflineEmissionsTracker(output_dir=log_dir_CC, country_iso_code=iso_code)        
     else:
-        tracker_CC = OfflineEmissionsTracker(output_dir=log_dir_CC, country_iso_code=iso_code)
-
+        tracker_CC = EmissionsTracker(output_dir=log_dir_CC)
+        
     tracker_CC.start()
 
     # PAPI
@@ -134,14 +137,15 @@ if __name__ == "__main__":
     subject_image_file_path = '{}/{}/{}'.format(img_data_dir, subject_id, input_file_name)
     subject_seg_file_path = '{}/{}/aparc.DKTatlas+aseg.deep.mgz'.format(seg_data_dir,subject_id)
 
-    cmd = "./run_fastsurfer.sh --fs_license {} \
-    --t1 {} \
+    cmd = f"./run_fastsurfer.sh \
+    --fs_license {fs_license} \
+    --t1 {subject_image_file_path} \
     --no_cuda \
-    --sid {}  \
-    --sd /output \
+    --sid {subject_id}  \
+    --sd {output_data_dir} \
     --surf_only \
-    --seg {} \
-    --parallel".format(fs_license,subject_image_file_path,subject_id,subject_seg_file_path)
+    --seg {subject_seg_file_path} \
+    --parallel"
 
 
     returned_value = subprocess.call(cmd, shell=True)  # returns the exit code in unix

@@ -120,10 +120,10 @@ def main():
     os.environ['TZ']= TZ
     
     if CC_offline:
-        tracker_CC = EmissionsTracker(output_dir=log_dir_CC) 
+        tracker_CC = OfflineEmissionsTracker(output_dir=log_dir_CC, country_iso_code=iso_code)        
     else:
-        tracker_CC = OfflineEmissionsTracker(output_dir=log_dir_CC, country_iso_code=iso_code)
-
+        tracker_CC = EmissionsTracker(output_dir=log_dir_CC)
+        
     tracker_CC.start()
 
     if count_FLOPs:

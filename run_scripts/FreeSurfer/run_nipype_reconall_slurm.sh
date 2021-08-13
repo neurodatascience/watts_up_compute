@@ -12,6 +12,8 @@ echo "Starting task $SLURM_ARRAY_TASK_ID"
 subject_id=$(sed -n "${SLURM_ARRAY_TASK_ID}p" subject_ids.txt)
 run_id=$1
 
-module load singularity/3.6
+module load singularity/3.8
 
-singularity exec --overlay /project/rpp-aevans-ab/neurohub/ukbb/imaging/neurohub_ukbb_t1_ses2_0_bids.squashfs:ro ../../FreeSurfer_tracker.simg ./run_nipype_reconall.sh sub-$subject_id $run_id
+singularity exec --overlay /project/rpp-aevans-ab/neurohub/ukbb/imaging/neurohub_ukbb_t1_ses2_0_bids.squashfs:ro \
+            ../../FastSurfer.sif \
+            ./run_nipype_reconall.sh sub-$subject_id $run_id "hpc"
