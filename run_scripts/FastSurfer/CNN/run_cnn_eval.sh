@@ -36,9 +36,9 @@ else
 fi
 
 # install git repos
-pip install -e $FASTSURFER_DIR
-pip install -e $EIT_DIR
-pip install -e $CC_DIR
+# pip install -e $FASTSURFER_DIR
+# pip install -e $EIT_DIR
+# pip install -e $CC_DIR
 
 python3 cnn_eval_with_tracker.py --i_dir ${IMG_DATA_DIR} \
 	--o_dir ${PROC_OUTPUT_DIR} \
