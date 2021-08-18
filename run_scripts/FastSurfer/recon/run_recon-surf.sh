@@ -21,9 +21,9 @@ HPC=$3
 if [ -z $HPC]; then
     echo "Using local data"
     PROJECT_DIR="/home/nikhil/projects/green_comp_neuro/watts_up_compute/"
-    FASTSURFER_DIR='/home/nikhil/projects/green_comp_neuro/FastSurfer/'
-	EIT_DIR='/home/nikhil/projects/green_comp_neuro/experiment-impact-tracker/'
-	CC_DIR='/home/nikhil/projects/green_comp_neuro/codecarbon/'
+    FASTSURFER_DIR="/home/nikhil/projects/green_comp_neuro/FastSurfer/"
+	EIT_DIR="/home/nikhil/projects/green_comp_neuro/experiment-impact-tracker/"
+	CC_DIR="/home/nikhil/projects/green_comp_neuro/codecarbon/"
 
     IMG_DATA_DIR="${PROJECT_DIR}local_test_data/mni/" 
     SEG_DATA_DIR="${PROJECT_DIR}proc_output/FastSurfer/CNN/local_tests/RUN_1/" 
@@ -34,9 +34,9 @@ if [ -z $HPC]; then
 
 else
     echo "Using HPC data"
-    FASTSURFER_DIR='~/FastSurfer/'
-	EIT_DIR='~/experiment-impact-tracker/'
-	CC_DIR='~/codecarbon/'
+    FASTSURFER_DIR="/home/nikhil/FastSurfer/"
+	EIT_DIR="/home/nikhil/experiment-impact-tracker/"
+	CC_DIR="/home/nikhil/codecarbon/"
 
     IMG_DATA_DIR="/neurohub/ukbb/imaging/" 
     SEG_DATA_DIR="/home/nikhil/green_compute/ukb_pilot/fastsurfer/recon-surf/prune_50/" 

@@ -53,7 +53,7 @@ from pypapi import events, papi_high as high
 
 # Carbon costs
 from experiment_impact_tracker.compute_tracker import ImpactTracker
-from codecarbon import EmissionsTracker, OfflineEmissionsTracker
+from codecarbon import OfflineEmissionsTracker
 from carbontracker.tracker import CarbonTracker
 from carbontracker import parser
 
@@ -591,7 +591,7 @@ if __name__ == "__main__":
     coords = (ly,lx)
     
     ## exp-impact-tracker (this exits automatically after script ends)
-    tracker_EIT = ImpactTracker(log_dir_EIT)
+    tracker_EIT = ImpactTracker(log_dir_EIT,coords)
     tracker_EIT.launch_impact_monitor()
 
     ## code-carbon tracker
