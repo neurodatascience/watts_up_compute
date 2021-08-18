@@ -1,16 +1,17 @@
 #!/bin/bash
+#SBATCH --account=def-jbpoline
 #SBATCH --nodes 1          # Request 1 nodes so all resources are in two nodes.
 #SBATCH --cpus-per-task=16 # Cores proportional to GPUs: 6 on Cedar, 16 on Graham.
 #SBATCH --mem=32G          # Memory proportional to GPUs: 32000 Cedar, 64000 Graham.
 #SBATCH --time=0-02:50
-#SBATCH --output=%N-%j.out
+#SBATCH --output=logs/%N-%j.out
 #SBATCH --array=1-73
 
 echo "Starting task $SLURM_ARRAY_TASK_ID"
-subject_id=$(sed -n "${SLURM_ARRAY_TASK_ID}p" subject_ids.txt)
+subject_id=$(sed -n "${SLURM_ARRAY_TASK_ID}p" ../../../subject_lists/subject_ids.txt)
 run_id=$1
 
-module load python/3.8
+module load singularity/3.8
 
 echo "using cpu"
 
