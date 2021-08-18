@@ -53,7 +53,7 @@ from pypapi import events, papi_high as high
 
 # Carbon costs
 from experiment_impact_tracker.compute_tracker import ImpactTracker
-from codecarbon import OfflineEmissionsTracker
+from codecarbon import OfflineEmissionsTracker, EmissionsTracker
 from carbontracker.tracker import CarbonTracker
 from carbontracker import parser
 
