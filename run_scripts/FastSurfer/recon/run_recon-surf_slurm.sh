@@ -8,7 +8,7 @@
 #SBATCH --array=1-73
 
 echo "Starting task $SLURM_ARRAY_TASK_ID"
-subject_id=$(sed -n "${SLURM_ARRAY_TASK_ID}p" subject_ids.txt)
+subject_id=$(sed -n "${SLURM_ARRAY_TASK_ID}p" ../../../subject_lists/subject_ids.txt)
 run_id=$1
 
 module load singularity/3.8
