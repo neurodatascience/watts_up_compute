@@ -75,6 +75,7 @@ if __name__ == "__main__":
     seg_data_dir = args.seg_data_dir
     input_file_name = args.input_file_name
     output_data_dir = args.output_data_dir
+
     fs_license = args.fs_license
 
     # FLOPs
@@ -136,7 +137,7 @@ if __name__ == "__main__":
  
     subject_image_file_path = '{}/{}/{}'.format(img_data_dir, subject_id, input_file_name)
     subject_seg_file_path = '{}/{}/aparc.DKTatlas+aseg.deep.mgz'.format(seg_data_dir,subject_id)
-
+    
     cmd = f"./run_fastsurfer.sh \
     --fs_license {fs_license} \
     --t1 {subject_image_file_path} \

@@ -8,9 +8,6 @@ echo "sourcing FreeSurfer env var"
 export FREESURFER_HOME=/opt/freesurfer-6.0.0/
 source $FREESURFER_HOME/SetUpFreeSurfer.sh
 
-echo "sourcing FastSurfer env var"
-export FASTSURFER_HOME=/home/nikhil/projects/green_comp_neuro/FastSurfer
-
 SUBJECT_ID=$1
 RUN_ID=$2
 HPC=$3
@@ -20,6 +17,10 @@ HPC=$3
 
 if [ -z $HPC]; then
     echo "Using local data"
+    
+    echo "sourcing FastSurfer env var"
+    export FASTSURFER_HOME=/home/nikhil/projects/green_comp_neuro/FastSurfer
+
     PROJECT_DIR="/home/nikhil/projects/green_comp_neuro/watts_up_compute/"
     FASTSURFER_DIR="/home/nikhil/projects/green_comp_neuro/FastSurfer/"
 	EIT_DIR="/home/nikhil/projects/green_comp_neuro/experiment-impact-tracker/"
@@ -34,12 +35,16 @@ if [ -z $HPC]; then
 
 else
     echo "Using HPC data"
+    
+    echo "sourcing FastSurfer env var"
+    export FASTSURFER_HOME=/home/nikhil/FastSurfer
+
     FASTSURFER_DIR="/home/nikhil/FastSurfer/"
 	EIT_DIR="/home/nikhil/experiment-impact-tracker/"
 	CC_DIR="/home/nikhil/codecarbon/"
 
     IMG_DATA_DIR="/neurohub/ukbb/imaging/" 
-    SEG_DATA_DIR="/home/nikhil/green_compute/ukb_pilot/fastsurfer/recon-surf/prune_50/" 
+    SEG_DATA_DIR="/output/proc_output/FastSurfer/CNN/hpc_tests/${RUN_ID}/" 
     INPUT_FILE_NAME="ses-2/anat/${SUBJECT_ID}_ses-2_T1w.nii.gz"    
 
     PROC_OUTPUT_DIR="/output/proc_output/FastSurfer/recon/hpc_tests/${RUN_ID}"

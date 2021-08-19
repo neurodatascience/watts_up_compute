@@ -29,7 +29,8 @@ then
   
   
 fi
-fastsurfercnndir="$FASTSURFER_HOME/FastSurferCNN"
+
+fastsurfercnndir="$FASTSURFER_HOME/FastSurferCNN" 
 reconsurfdir="$FASTSURFER_HOME/recon_surf"
 
 # Regular flags defaults
