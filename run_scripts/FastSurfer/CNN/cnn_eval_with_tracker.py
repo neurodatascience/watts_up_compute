@@ -34,9 +34,9 @@ from os import makedirs
 # Add paths (singularity should see these)
 # FastSurfer and carbon trackers are in the mounted dir as these repos keep getting updated.
 # TODO replace this with setup.py once the dependencis become stable
-sys.path.append('../../../../FastSurfer/')
-sys.path.append('../../../../experiment-impact-tracker/')
-sys.path.append('../../../../codecarbon/')
+#sys.path.append('../../../../FastSurfer/')
+#sys.path.append('../../../../experiment-impact-tracker/')
+#sys.path.append('../../../../codecarbon/')
 
 from FastSurferCNN.data_loader.load_neuroimaging_data import OrigDataThickSlices
 from FastSurferCNN.data_loader.load_neuroimaging_data import map_label2aparc_aseg

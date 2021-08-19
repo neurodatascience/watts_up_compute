@@ -29,7 +29,7 @@ else
     echo "Using HPC data"
 	FASTSURFER_DIR="/home/nikhil/FastSurfer/"
 	EIT_DIR="/home/nikhil/experiment-impact-tracker/"
-	CC_DIR="home/nikhil/codecarbon/"
+	CC_DIR="/home/nikhil/codecarbon/"
 
     IMG_DATA_DIR="/neurohub/ukbb/imaging/" 
     INPUT_FILE_NAME="ses-2/anat/${SUBJECT_ID}_ses-2_T1w.nii.gz"
@@ -38,9 +38,9 @@ else
 fi
 
 # install git repos
-# pip install -e $FASTSURFER_DIR
-# pip install -e $EIT_DIR
-# pip install -e $CC_DIR
+pip install -e $FASTSURFER_DIR
+pip install -e $EIT_DIR
+pip install -e $CC_DIR
 
 python3 cnn_eval_with_tracker.py --i_dir ${IMG_DATA_DIR} \
 	--o_dir ${PROC_OUTPUT_DIR} \
