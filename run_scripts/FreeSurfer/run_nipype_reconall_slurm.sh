@@ -15,5 +15,8 @@ run_id=$1
 module load singularity/3.8
 
 singularity exec --overlay /project/rpp-aevans-ab/neurohub/ukbb/imaging/neurohub_ukbb_t1_ses2_0_bids.squashfs:ro \
-            ../../FastSurfer.sif \
+            -B /home/nikhil/scratch/ukb/output/:/output \
+            -B /home/nikhil/:/home/nikhil/ \
+            /home/nikhil/scratch/FastSurfer.sif \
             ./run_nipype_reconall.sh sub-$subject_id $run_id "hpc"
+

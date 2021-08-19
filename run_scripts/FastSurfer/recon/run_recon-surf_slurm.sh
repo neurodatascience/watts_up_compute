@@ -14,6 +14,7 @@ run_id=$1
 module load singularity/3.8
 
 singularity exec --overlay /project/rpp-aevans-ab/neurohub/ukbb/imaging/neurohub_ukbb_t1_ses2_0_bids.squashfs:ro \
--B /home/nikhil/green_compute/ukb_pilot/fastsurfer/recon-surf/prune_50:/output \
-../../FastSurfer.sif \
-./run_recon-surf.sh sub-$subject_id $run_id "hpc"
+            -B /home/nikhil/scratch/ukb/output/:/output \
+            -B /home/nikhil/:/home/nikhil/ \
+            /home/nikhil/scratch/FastSurfer.sif \
+            ./run_recon-surf.sh sub-$subject_id $run_id "hpc"
